@@ -46,6 +46,8 @@ class DeadList
                 puts "\n💾 #{argument_payload.to_s} set as default format"
             end
         end
+
+        sleep(1)
     end
 
     def handle_request
@@ -57,11 +59,22 @@ class DeadList
             sleep(1)
 
             for link in @links do
-                page_source = HTTParty.get(link)
-                parsed_page_source = Nokogiri::HTML(page_source)
+                if !link.include? "archive.org"
+                    puts "\n❌ Error! Only links from archive.org are currently supported."
+                else
+                    parsed_page_source = Nokogiri::HTML(HTTParty.get(link).body)
+                    show_name = parsed_page_source.css('span[itemprop="name"]')[0].content
+                    track_array = parsed_page_source.css('div[itemprop="track"]')
 
-                track_array = parsed_page_source.css('div[itemprop="track"]')
-                puts track_array.length
+                    if track_array.length == 0
+                        puts "\n❌ Error! No tracks found on page. Please double check link:#{link}."
+                    else
+                        puts "\n💀 Next Up: #{show_name.to_s}"
+                        puts "-" * show_name.to_s.length
+                        sleep(1)
+                        puts "#{track_array.length} tracks found!"
+                    end
+                end
                 sleep(1)
             end
         end
@@ -74,4 +87,5 @@ end
 # Run DeadList
 if __FILE__ == $0
   DeadList.new.run
+  puts "\n"
 end
