@@ -32,19 +32,23 @@ class DeadList
         end
 
         for arg in @ARGS
+            # Variable store
             argument_name = arg[0]
             argument_payload = arg[1]
 
+            # Check for version flag
             if argument_name == '--version'
                 puts '1.0.0'
                 puts '=' * 50 + "\n"
                 puts 
             end
 
+            # Check for links string and split as an array
             if argument_name == '--links'
                 @links = argument_payload.split(",")
             end
 
+            # Check for format flag and set it as defualt if there
             if argument_name == '--format'
                 @preferred_format = argument_payload.to_s
 
@@ -56,6 +60,7 @@ class DeadList
     end
 
     def download_track(track)
+        # Variable store
         track_name = nil
         track_links = []
         formats = []
@@ -87,7 +92,12 @@ class DeadList
             end
         elsif track_links.length > 1 && @preferred_format != nil
             # Download file with matching format
-
+            for track in track_links
+                download = URI.open(track)
+                # Get the trackname and pass it as the filename
+                IO.copy_stream(download, "./track_name.#{@preferred_format}")  
+            end
+            
         elsif track_links.length < 1
             puts "\n❌ Error! Audio links are not available for this track."
         end
