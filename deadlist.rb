@@ -95,7 +95,7 @@ class DeadList
             for track in track_links
                 download = URI.open(track)
                 # Get the trackname and pass it as the filename
-                IO.copy_stream(download, "./track_name.#{@preferred_format}")  
+                IO.copy_stream(download, "./#{track_name}.#{@preferred_format}")  
             end
             
         elsif track_links.length < 1
