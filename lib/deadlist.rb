@@ -7,7 +7,7 @@ require 'pry'
 # Main DeadList class.
 class DeadList
     def initialize
-        @version = '1.0.0'
+        @version = ENV.version
         @hostname = 'https://www.archive.org/'
         @links = []
         @ARGS = []
