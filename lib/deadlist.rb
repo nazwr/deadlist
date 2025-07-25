@@ -3,6 +3,7 @@ require 'json'
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
+require 'dotenv'
 
 # Main DeadList class.
 class DeadList
