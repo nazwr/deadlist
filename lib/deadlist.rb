@@ -17,56 +17,19 @@ require './lib/deadlist/cli.rb'
 
 class DeadList
     def initialize
-        @version = '1.0.0'
+        @current_version = '1.0.0'
         @hostname = 'https://www.archive.org/'
         @links = []
-        @ARGS = []
         @preferred_format = nil
-        @session = CLI.new(ARGV, @version)
     end
 
-    def run
-        @session.start
-        @session.version_check
-        
-        # handle_arguments
-        process_links
+    def run        
+        session = CLI.new(@current_version, ARGV)
+        session.process_links
+
+        # process_links
         print_execution_report
     end
-    
-    # def handle_arguments
-    #     for arg in ARGV do
-    #         split_string = arg.split('=')
-    #         @ARGS.push(split_string)
-    #     end
-
-    #     for arg in @ARGS
-    #         # Variable store
-    #         argument_name = arg[0]
-    #         argument_payload = arg[1]
-
-    #         # Check for version flag
-    #         if argument_name == '--version'
-    #             puts '1.0.0'
-    #             puts '=' * 50 + "\n"
-    #             puts 
-    #         end
-
-    #         # Check for links string and split as an array
-    #         if argument_name == '--links'
-    #             @links = argument_payload.split(",")
-    #         end
-
-    #         # Check for format flag and set it as defualt if there
-    #         if argument_name == '--format'
-    #             @preferred_format = argument_payload.to_s
-
-    #             puts "\n💾 #{argument_payload.to_s} set as default format"
-    #         end
-    #     end
-
-    #     # sleep(1)
-    # end
 
     def download_track(track)
         # Variable store
