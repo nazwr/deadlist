@@ -8,7 +8,6 @@ group :test do
 end
 
 # gem "rails"
-gem 'dotenv-rails'
 gem "pry"
 gem "nokogiri"
 gem "json"

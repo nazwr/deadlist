@@ -8,3 +8,7 @@ Using Deadlist, you can
 
 ## How It Works
 Deadlist scrapes audio files from archive.org pages by getting the HTML for the page, identifying .mp3 (and other audio formats) within and retrieving the files.
+
+
+## Test Commands
+ruby ./lib/deadlist.rb --links=https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16 --format=mp3

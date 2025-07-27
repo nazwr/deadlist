@@ -1,4 +1,3 @@
-cat deadlist.gemspec
 Gem::Specification.new do |s|
   s.name        = "deadlist"
   s.version     = "1.0.0"
@@ -10,4 +9,5 @@ Gem::Specification.new do |s|
   s.homepage    =
     "https://rubygems.org/gems/deadlist"
   s.license       = "MIT"
+  s.required_ruby_version = '>= 2.7.0'
 end

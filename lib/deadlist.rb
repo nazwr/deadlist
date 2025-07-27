@@ -3,12 +3,11 @@ require 'json'
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
-require 'dotenv'
 
 # Main DeadList class.
 class DeadList
     def initialize
-        @version = ENV.version
+        @version = '1.0.0'
         @hostname = 'https://www.archive.org/'
         @links = []
         @ARGS = []
