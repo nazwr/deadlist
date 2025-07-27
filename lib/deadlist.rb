@@ -22,55 +22,51 @@ class DeadList
         @links = []
         @ARGS = []
         @preferred_format = nil
-    end
-
-    def version
-        return "v" + @version
+        @session = CLI.new(ARGV, @version)
     end
 
     def run
-        session = CLI.new(ARGV)
-        session.start
-        # sleep(1)
+        @session.start
+        @session.version_check
         
-        handle_arguments
+        # handle_arguments
         process_links
         print_execution_report
     end
     
-    def handle_arguments
-        for arg in ARGV do
-            split_string = arg.split('=')
-            @ARGS.push(split_string)
-        end
+    # def handle_arguments
+    #     for arg in ARGV do
+    #         split_string = arg.split('=')
+    #         @ARGS.push(split_string)
+    #     end
 
-        for arg in @ARGS
-            # Variable store
-            argument_name = arg[0]
-            argument_payload = arg[1]
+    #     for arg in @ARGS
+    #         # Variable store
+    #         argument_name = arg[0]
+    #         argument_payload = arg[1]
 
-            # Check for version flag
-            if argument_name == '--version'
-                puts '1.0.0'
-                puts '=' * 50 + "\n"
-                puts 
-            end
+    #         # Check for version flag
+    #         if argument_name == '--version'
+    #             puts '1.0.0'
+    #             puts '=' * 50 + "\n"
+    #             puts 
+    #         end
 
-            # Check for links string and split as an array
-            if argument_name == '--links'
-                @links = argument_payload.split(",")
-            end
+    #         # Check for links string and split as an array
+    #         if argument_name == '--links'
+    #             @links = argument_payload.split(",")
+    #         end
 
-            # Check for format flag and set it as defualt if there
-            if argument_name == '--format'
-                @preferred_format = argument_payload.to_s
+    #         # Check for format flag and set it as defualt if there
+    #         if argument_name == '--format'
+    #             @preferred_format = argument_payload.to_s
 
-                puts "\n💾 #{argument_payload.to_s} set as default format"
-            end
-        end
+    #             puts "\n💾 #{argument_payload.to_s} set as default format"
+    #         end
+    #     end
 
-        # sleep(1)
-    end
+    #     # sleep(1)
+    # end
 
     def download_track(track)
         # Variable store
