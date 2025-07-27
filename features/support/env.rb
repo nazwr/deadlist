@@ -1,1 +1,1 @@
-CUCUMBER_PUBLISH_QUIET=true
+require 'rspec/expectations'

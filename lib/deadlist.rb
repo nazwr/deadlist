@@ -4,7 +4,17 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
+require './lib/deadlist/cli.rb'
+
 # Main DeadList class.
+
+# # What if you structured it like this?
+# DeadList::Client       # Core scraping logic
+# DeadList::CLI          # Command line interface  
+# DeadList::Track        # Data model
+# DeadList::Show         # Data model
+# DeadList::Downloader   # Download orchestration
+
 class DeadList
     def initialize
         @version = '1.0.0'
@@ -14,10 +24,13 @@ class DeadList
         @preferred_format = nil
     end
 
+    def version
+        return "v" + @version
+    end
+
     def run
-        puts '='*50
-        puts "🌹⚡️ One man gathers what another man spills..."
-        puts '='*50
+        session = CLI.new(ARGV)
+        session.start
         # sleep(1)
         
         handle_arguments
@@ -90,6 +103,8 @@ class DeadList
                     end
                 end
             end
+        elsif @preferred_format == 'test'
+            puts "🧪 Test command, skipping download"
         elsif track_links.length > 1 && @preferred_format != nil
             # Download file with matching format
             for track in track_links

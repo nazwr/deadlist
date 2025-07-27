@@ -1,11 +1,13 @@
+require './lib/deadlist.rb'
+
 Given("DeadList is initialized") do
-  pending # Write code here that turns the phrase above into concrete actions
+  @deadlist = DeadList.new
 end
 
-When("the --version flag is passed") do
-  pending # Write code here that turns the phrase above into concrete actions
+When("the --version method is called") do
+  @version = @deadlist.version
 end
 
-Then('a semantic version v1.X.X etc. should be output') do |string|
-  pending # Write code here that turns the phrase above into concrete actions
+Then('a semantic version v1.X.X etc. should be output') do
+  expect(@version).to eq('v1.0.0')
 end

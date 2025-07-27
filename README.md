@@ -12,3 +12,4 @@ Deadlist scrapes audio files from archive.org pages by getting the HTML for the 
 
 ## Test Commands
 ruby ./lib/deadlist.rb --links=https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16 --format=mp3
+ruby ./lib/deadlist.rb --links=https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16 --format=test
