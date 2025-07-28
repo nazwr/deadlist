@@ -19,13 +19,13 @@ class DeadList
     def initialize
         @current_version = '1.0.0'
         @hostname = 'https://www.archive.org/'
-        @links = []
         @preferred_format = nil
     end
 
     def run        
         session = CLI.new(@current_version, ARGV)
-        session.process_links
+        links = session.scrape_links
+        # session.process_links
 
         # process_links
         print_execution_report
@@ -79,40 +79,7 @@ class DeadList
         puts "Now downloading: #{track_name}"
     end
 
-    def process_links
-        if @links.length == 0
-            puts "\n❌ Error! No links found."
-            # sleep(1)
-        else
-            puts "\n🔗 #{@links.length} Links found, processing..."
-            # sleep(1)
-
-            for link in @links do
-                if !link.include? "archive.org"
-                    puts "\n❌ Error! Only links from archive.org are currently supported."
-                else
-                    parsed_page_source = Nokogiri::HTML(HTTParty.get(link).body)
-                    show_name = parsed_page_source.css('span[itemprop="name"]')[0].content
-                    track_array = parsed_page_source.css('div[itemprop="track"]')
-
-                    if track_array.length == 0
-                        puts "\n❌ Error! No tracks found on page. Please double check link:#{link}."
-                    else
-                        puts "\n💀 Next Up: #{show_name.to_s}"
-                        puts "-" * 50
-                        # sleep(1)
-                        puts "\n#{track_array.length} tracks found!"
-                        puts "-" * 50
-                        
-                        for track in track_array do
-                            download_track(track)
-                        end
-                    end
-                end
-                # sleep(1)
-            end
-        end
-    end
+    
 
     def print_execution_report
     end
