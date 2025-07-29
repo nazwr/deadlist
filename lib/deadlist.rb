@@ -33,7 +33,7 @@ class DeadList
         session.validate_format
 
         # Create folder with show date and begin track downloads.
-        # session.download(show)
+        session.download_show
 
         # Tidy up with an execution report
         print_execution_report

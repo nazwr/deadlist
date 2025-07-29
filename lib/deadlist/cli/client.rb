@@ -11,7 +11,7 @@ class Client
             track_divs = parsed_page_source.css('div[itemprop="track"]')
 
             # Main info object to be returned
-            # ⚠️ Refactor this to use a Show class, containing Track class array.
+            # ⚠️ Refactor this to use a Show class, containing Track class array. Maybe that happens after passing back to CLI.
             show_info = {
                 show_name: parsed_page_source.css('span[itemprop="name"]')[0].content,
                 tracks: []
@@ -32,7 +32,6 @@ class Client
                     if child.name == "meta" && child.attribute_nodes[0].value == "name"
                         track[:name] = child.attribute_nodes[1].value
                     elsif child.name == "link"
-                        # ❌ Why is this pushing 2x .mp3 files, vs each one seperately? 
                         track[:links] << child.attribute_nodes[1].value
                     end
                 end
@@ -44,7 +43,6 @@ class Client
             if show_info[:tracks].length == 0
                 puts "\n❌ Error! No tracks found on page. Please double check link."
             else   
-                puts "\n💿 #{show_info[:tracks].length} tracks found!"
                 return show_info
             end
         end        

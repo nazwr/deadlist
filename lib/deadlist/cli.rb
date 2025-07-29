@@ -1,4 +1,4 @@
-require './lib/deadlist/client.rb'
+require './lib/deadlist/cli/client.rb'
 require "readline"
 
 class CLI
@@ -6,12 +6,13 @@ class CLI
         @version = version
         @args = {}
         @show = nil
-        @format = nil
+        @download_format = nil
 
         startup_text
         parse_arguments(args)
     end
 
+    # Add a --quiet startup option for 
     def startup_text
         puts "\n\n"
         puts '='*52
@@ -22,38 +23,64 @@ class CLI
     end
 
     def parse_arguments(args)
-        for arg in args do
-            split_string = arg.split('=')            
-            @args[split_string[0].tr('--', '').to_sym] = split_string[1]
+        args.each do |arg|
+            key, value = arg.split('=')
+            @args[key.tr('--', '').to_sym] = value
         end
     end
 
     def scrape_links
         show_link = @args[:show]
-
-        if show_link.nil?
-            puts "\n❌ Error! No links found."
-        else
-            @show = Client.new.scrape(show_link)
-        end
+        return puts "\n❌ Error! No links found." if show_link.nil?
+        
+        # Change to show_data and pass to @show after formatting as Show class
+        @show = Client.new.scrape(show_link)
+        puts "\n💿 #{@show[:tracks].length} tracks found!"
+    rescue => e
+        puts "\n❌ Scraping failed: #{e.message}"
     end
 
     def validate_format
         preferred_format = @args[:format]
+        # Move to Show class eventually
+        # Get show formats in an array
+        if preferred_format == "test"
+            puts "\n💾 #{preferred_format} execution. Skipping download..."
+            return
+        elsif !preferred_format.nil?
+            for link in @show[:tracks][0][:links]
+                format = link[-3..]
 
-        if preferred_format.nil?
-            puts "\n💾 No preferred format selected! Please select from the formats for this show."
-        elsif
-            # Show does not have default format in list
-            # puts "\n💾 #{preferred_format} not found for this show! Formats available:"
-            prompt = "> "
-            while buf = Readline.readline(prompt, true)
-                puts "Your input was: '#{buf}'"
+                if format == preferred_format
+                    @download_format = format
+                    puts "\n💾 .#{format} found for this show. Downloading..."
+                    return                    
+                end
             end
-        else
-            # Show has default format
-            @format = preferred_format
-            puts "\n💾 #{preferred_format} found for this show. Downloading..."
+
+            puts "\n#‼️ .#{preferred_format} not found for this show!"
+
+        elsif preferred_format.nil?
+            available_formats = []
+            for format in @show[:tracks][0][:links]
+                available_formats << format[-3..]
+            end
+            puts "\n‼️ No format given! #{available_formats} available for this show."
+        end
+    end
+
+    def download_show
+        if @download_format
+            # Require this from --args
+            download_folder = "./shows/#{@show[:show_name][-10..]}"
+            # Create folder
+            Dir.mkdir download_folder
+            # Download tracks to folder
+            downloader = Downloader.new
+
+            for track in @show[:tracks]
+                downloader.get(track)
+            end
         end
     end
 end
