@@ -1,10 +1,12 @@
 require './lib/deadlist/client.rb'
+require "readline"
 
 class CLI
     def initialize(version, args)
         @version = version
         @args = {}
         @show = nil
+        @format = nil
 
         startup_text
         parse_arguments(args)
@@ -37,6 +39,21 @@ class CLI
     end
 
     def validate_format
-        default_format = @args[:format]
+        preferred_format = @args[:format]
+
+        if preferred_format.nil?
+            puts "\n💾 No preferred format selected! Please select from the formats for this show."
+        elsif
+            # Show does not have default format in list
+            # puts "\n💾 #{preferred_format} not found for this show! Formats available:"
+            prompt = "> "
+            while buf = Readline.readline(prompt, true)
+                puts "Your input was: '#{buf}'"
+            end
+        else
+            # Show has default format
+            @format = preferred_format
+            puts "\n💾 #{preferred_format} found for this show. Downloading..."
+        end
     end
 end
