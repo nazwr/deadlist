@@ -4,17 +4,9 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-require './lib/deadlist/cli.rb'
+require_relative 'deadlist/cli.rb'
 
 # Main DeadList class.
-
-# # What if you structured it like this?
-# DeadList::Client       # Core scraping logic
-# DeadList::CLI          # Command line interface  
-# DeadList::Track        # Data model
-# DeadList::Show         # Data model
-# DeadList::Downloader   # Download orchestration
-
 class DeadList
     def initialize
         @current_version = '1.0.0'

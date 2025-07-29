@@ -1,5 +1,6 @@
-require './lib/deadlist/cli/client.rb'
-require "readline"
+require_relative 'cli/client.rb'
+require_relative 'cli/downloader.rb'
+require 'fileutils'
 
 class CLI
     def initialize(version, args)
@@ -69,17 +70,29 @@ class CLI
         end
     end
 
+    def setup_directories(show, base_path = Dir.pwd)
+        show_date = show[:show_name][-10..]
+
+        # Create base shows directory
+        shows_dir = File.join(base_path, "shows")
+        FileUtils.mkdir_p(shows_dir)
+        
+        # Create specific show directory
+        show_dir = File.join(shows_dir, show_date)
+        FileUtils.mkdir_p(show_dir)
+
+        return show_dir
+    end
+
     def download_show
         if @download_format
-            # Require this from --args
-            download_folder = "./shows/#{@show[:show_name][-10..]}"
-            # Create folder
-            Dir.mkdir download_folder
+            download_path = setup_directories(@show)
+
             # Download tracks to folder
-            downloader = Downloader.new
+            dl = Downloader.new(download_path, @download_format)
 
             for track in @show[:tracks]
-                downloader.get(track)
+                dl.get(track)
             end
         end
     end
