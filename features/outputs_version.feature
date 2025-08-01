@@ -5,5 +5,5 @@ Feature: DeadList should output its version.
 
     Scenario: --version flag is passed
         Given DeadList is initialized
-        When the --version flag is passed
+        When the --version method is called
         Then a semantic version v1.X.X etc. should be output
