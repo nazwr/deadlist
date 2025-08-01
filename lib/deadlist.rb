@@ -1,5 +1,4 @@
 require 'httparty'
-require 'json'
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
@@ -14,24 +13,15 @@ class DeadList
     end
 
     def run        
-        # Start a new download session
+        # Start a new CLI session
         # In future this could be abstracted to pass the show link vs all args, so a 'session' is started per show.
         session = CLI.new(@current_version, ARGV)
 
-        # Scrape links for given show
+        # Scrape links and metadata for given show
         session.scrape_links
-        
-        # Request download format input from users if no default set or no format matches default. Prints format.
-        session.validate_format
 
-        # Create folder with show date and begin track downloads.
+        # Create folder with show date and begin track downloads if format matches
         session.download_show
-
-        # Tidy up with an execution report
-        print_execution_report
-    end
-
-    def print_execution_report
     end
 end
 
