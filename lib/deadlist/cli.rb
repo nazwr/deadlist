@@ -57,14 +57,12 @@ class CLI
 
     # Configures directories that will be used by the downloader
     def setup_directories(show, base_path = Dir.pwd)
-        show_date = show.date
-
         # Create base shows directory
         shows_dir = File.join(base_path, "shows")
         FileUtils.mkdir_p(shows_dir)
         
         # Create specific show directory
-        show_dir = File.join(shows_dir, show_date)
+        show_dir = File.join(shows_dir, show.name)
         FileUtils.mkdir_p(show_dir)
 
         return show_dir
