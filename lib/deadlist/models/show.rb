@@ -1,3 +1,4 @@
+# Object to handle Show data and the array of Track objects to be used in downloading.
 class Show
     attr_reader :name, :venue, :date, :location, :duration, :transferred_by, :tracks, :available_formats
 
@@ -15,10 +16,12 @@ class Show
         set_show_info
     end
 
+    # Returns whether or not a given format is available for this show
     def has_format?(requested_format)
       @tracks[0].has_format?(requested_format)
     end
 
+    # Initializes a Downloader and passes track details
     def download_tracks(path, format)
         dl = Downloader.new(path, format)
 
@@ -33,6 +36,7 @@ class Show
 
     private
 
+    # On initialization, show variables are extracted from the HTML data scraped by the Client.
     def set_show_info
         show_data = Client.new.scrape_show_info(@show_link)
         
@@ -47,16 +51,8 @@ class Show
         puts "🌹💀 Downloading #{name}"
     end
     
+    # Converts track lists to Track objects
     def set_tracks(track_data)
         @tracks = track_data.map { |track| Track.new(track) }
     end
-
-    # def download_tracks(format)
-    #   @tracks.each do |track|
-    #     if track.has_format?(format)
-    #        puts "download" 
-    #     end
-    #   end
-    # end
-
 end

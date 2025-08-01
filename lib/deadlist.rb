@@ -1,11 +1,9 @@
 require 'httparty'
-require 'json'
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
 require_relative 'deadlist/cli.rb'
-
 
 # Main DeadList class.
 class DeadList
@@ -24,9 +22,6 @@ class DeadList
 
         # Create folder with show date and begin track downloads if format matches
         session.download_show
-
-        # Tidy up with an execution report
-        # print_execution_report
     end
 end
 

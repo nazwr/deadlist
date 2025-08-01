@@ -1,6 +1,6 @@
 # The Client class manages HTML scraping and parsing for the CLI and other classes above it. Any HTML work should be handled here.
 class Client
-    # Creates show_data object for helping in the creation of a new Show
+    # Returns a show_data object for helping in the creation of a new Show
     def scrape_show_info(show_link)
         doc = get_page_source(show_link)
         track_divs = doc.css('div[itemprop="track"]')
@@ -21,7 +21,7 @@ class Client
 
     private 
 
-    # Returns nokogiri-fied page HTML
+    # Returns nokogiri-fied page HTML for use in scraping show info
     def get_page_source(show_link)
         return Nokogiri::HTML(HTTParty.get(show_link).body)
     rescue => e
@@ -39,7 +39,7 @@ class Client
         end
     end
 
-    # Hunts through track-divs for information required to create Tracks
+    # Hunts through track-divs for data required to create Tracks
     def extract_track_data(track_divs)
         track_divs.each_with_index.map do |div, i|
             {
