@@ -30,9 +30,6 @@ class DeadList
         # Tidy up with an execution report
         print_execution_report
     end
-
-    def print_execution_report
-    end
 end
 
 # Run DeadList
