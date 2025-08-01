@@ -40,6 +40,8 @@ class CLI
         elsif @show.has_format?(download_format)
             download_path = setup_directories(@show)
             @show.download_tracks(download_path, download_format)
+        else
+            puts "\n❌ #{download_format} not found for this show! #{@show.tracks[0].available_formats} available"
         end
     end
 
