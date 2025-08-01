@@ -15,16 +15,19 @@ class Show
         set_show_info
     end
 
-    def has_format(requested_format)
+    def has_format?(requested_format)
       @tracks[0].has_format?(requested_format)
     end
 
     def download_tracks(path, format)
-        dl = Downloader.new(download_path, @download_format)
+        dl = Downloader.new(path, format)
 
         @tracks.each do |track|
             track_link = track.url_for_format(format)
-            dl.get(track_link)
+
+            dl.get(track.pos, track.name, track_link)
+
+            puts "⚡️ #{track.pos} - #{track.name} downloaded successfully"
         end
     end
 
@@ -40,6 +43,8 @@ class Show
         @transferred_by = show_data[:transferred_by]
         @name = "#{show_data[:date]} - #{show_data[:venue]} - #{show_data[:location]}"
         @tracks = set_tracks(show_data[:tracks])
+
+        puts "🌹💀 Downloading #{name}"
     end
     
     def set_tracks(track_data)

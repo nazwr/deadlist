@@ -47,7 +47,7 @@ class CLI
 
         if download_format == "test"
           puts "Test Download, skipping"
-        elsif @show.has_format(download_format)
+        elsif @show.has_format?(download_format)
             download_path = setup_directories(@show)
             @show.download_tracks(download_path, download_format)
         end
