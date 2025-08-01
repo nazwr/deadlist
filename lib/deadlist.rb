@@ -6,6 +6,7 @@ require 'pry'
 
 require_relative 'deadlist/cli.rb'
 
+
 # Main DeadList class.
 class DeadList
     def initialize
@@ -28,7 +29,7 @@ class DeadList
         session.download_show
 
         # Tidy up with an execution report
-        print_execution_report
+        # print_execution_report
     end
 end
 

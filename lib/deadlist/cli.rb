@@ -1,5 +1,6 @@
 require_relative 'cli/client.rb'
 require_relative 'cli/downloader.rb'
+require_relative 'models/show.rb'
 require 'fileutils'
 
 class CLI
@@ -31,11 +32,12 @@ class CLI
     end
 
     def scrape_links
-        show_link = @args[:show]
+        @show = Show.new(@args[:show])
+        binding.pry
         return puts "\n❌ Error! No links found." if show_link.nil?
         
         # Change to show_data and pass to @show after formatting as Show class
-        @show = Client.new.scrape(show_link)
+        # @show = Client.new.scrape(show_link)
         puts "\n💿 #{@show[:tracks].length} tracks found!"
     rescue => e
         puts "\n❌ Scraping failed: #{e.message}"
