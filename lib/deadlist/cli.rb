@@ -1,28 +1,21 @@
-require_relative 'cli/client.rb'
-require_relative 'cli/downloader.rb'
+require_relative 'cli/client'
+require_relative 'cli/downloader'
+require_relative 'models/show'
+require_relative 'models/track'
 require 'fileutils'
 
+# The CLI is the 'session' created by the main class, managing arguments passed in and housing methods for scraping and downloading shows.
 class CLI
     def initialize(version, args)
         @version = version
         @args = {}
         @show = nil
-        @download_format = nil
 
         startup_text
         parse_arguments(args)
     end
 
-    # Add a --quiet startup option for 
-    def startup_text
-        puts "\n\n"
-        puts '='*52
-        puts "🌹⚡️ One man gathers what another man spills... ⚡️🌹"
-        puts '='*52
-        puts ' '*23 + "v#{@version}"
-        puts (' '*10) + ('='*32) + (' '*10)
-    end
-
+    # Reads arguments passed at the command line and maps them to an instance object
     def parse_arguments(args)
         args.each do |arg|
             key, value = arg.split('=')
@@ -30,48 +23,39 @@ class CLI
         end
     end
 
+    # Creates new show object with link given populated with metadata and track details
     def scrape_links
-        show_link = @args[:show]
-        return puts "\n❌ Error! No links found." if show_link.nil?
-        
-        # Change to show_data and pass to @show after formatting as Show class
-        @show = Client.new.scrape(show_link)
-        puts "\n💿 #{@show[:tracks].length} tracks found!"
+        @show = Show.new(@args[:show])
+        puts "\n💿 #{@show.tracks.length} tracks found!"
     rescue => e
         puts "\n❌ Scraping failed: #{e.message}"
     end
 
-    def validate_format
-        preferred_format = @args[:format]
-        # Move to Show class eventually
-        # Get show formats in an array
-        if preferred_format == "test"
-            puts "\n💾 #{preferred_format} execution. Skipping download..."
-            return
-        elsif !preferred_format.nil?
-            for link in @show[:tracks][0][:links]
-                format = link[-3..]
+    # Validates format isn't for test, and passes directory + format arguments to the download method of a Show
+    def download_show
+        download_format = @args[:format]
 
-                if format == preferred_format
-                    @download_format = format
-                    puts "\n💾 .#{format} found for this show. Downloading..."
-                    return                    
-                end
-            end
-
-            puts "\n#‼️ .#{preferred_format} not found for this show!"
-
-        elsif preferred_format.nil?
-            available_formats = []
-            for format in @show[:tracks][0][:links]
-                available_formats << format[-3..]
-            end
-            puts "\n‼️ No format given! #{available_formats} available for this show."
+        if download_format == "test"
+          puts "Test Download, skipping"
+        elsif @show.has_format?(download_format)
+            download_path = setup_directories(@show)
+            @show.download_tracks(download_path, download_format)
         end
     end
 
+    private
+
+    # Deadlist starts with some friendly text
+    def startup_text
+        puts "\n\n"
+        puts '='*52
+        puts "🌹⚡️ One man gathers what another man spills... ⚡️🌹"
+        puts '='*52
+    end
+
+    # Configures directories that will be used by the downloader
     def setup_directories(show, base_path = Dir.pwd)
-        show_date = show[:show_name][-10..]
+        show_date = show.date
 
         # Create base shows directory
         shows_dir = File.join(base_path, "shows")
@@ -82,18 +66,5 @@ class CLI
         FileUtils.mkdir_p(show_dir)
 
         return show_dir
-    end
-
-    def download_show
-        if @download_format
-            download_path = setup_directories(@show)
-
-            # Download tracks to folder
-            dl = Downloader.new(download_path, @download_format)
-
-            for track in @show[:tracks]
-                dl.get(track)
-            end
-        end
     end
 end
