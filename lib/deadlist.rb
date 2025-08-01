@@ -7,9 +7,11 @@ require_relative 'deadlist/cli.rb'
 
 # Main DeadList class.
 class DeadList
+    HOSTNAME = 'https://www.archive.org/'
+
     def initialize
         @current_version = '1.0.0'
-        @hostname = 'https://www.archive.org/'
+        @hostname = HOSTNAME
     end
 
     def run        
