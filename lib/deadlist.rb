@@ -10,9 +10,11 @@ class DeadList
     HOSTNAME = 'https://www.archive.org/'
 
     def initialize
-        @current_version = '1.0.0'
+        @current_version = '1.0.1'
         @hostname = HOSTNAME
     end
+
+    # Argument abstraction should probably happen at this level!
 
     def run        
         # Start a new CLI session
