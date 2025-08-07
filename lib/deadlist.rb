@@ -7,10 +7,14 @@ require_relative 'deadlist/cli.rb'
 
 # Main DeadList class.
 class DeadList
+    HOSTNAME = 'https://www.archive.org/'
+
     def initialize
-        @current_version = '1.0.0'
-        @hostname = 'https://www.archive.org/'
+        @current_version = '1.0.1'
+        @hostname = HOSTNAME
     end
+
+    # Argument abstraction should probably happen at this level!
 
     def run        
         # Start a new CLI session
