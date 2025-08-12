@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'deadlist'
+
+DeadList.new.run

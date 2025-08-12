@@ -11,7 +11,7 @@ In the future, you can use Deadlist to
 
 ### Arguments
 * --format (required) | --format=mp3 | Format for track downloads, typically .mp3, .ogg or .flac
-* --link (required) | --link={uri} | Show link from archive.org to get the link from
+* --show (required) | --show={uri} | Show link from archive.org to get the link from
 
 ## How Its Structured
 Deadlist scrapes audio files from archive.org pages by getting the HTML for the page, identifying .mp3 (or other audio formats) within and retrieving the files.
