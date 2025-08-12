@@ -1,26 +1,45 @@
 # The Client class manages HTML scraping and parsing for the CLI and other classes above it. Any HTML work should be handled here.
 class Client
-    # Returns a show_data object for helping in the creation of a new Show
-    def scrape_show_info(show_link)
-        doc = get_page_source(show_link)
-        track_divs = doc.css('div[itemprop="track"]')
+    # RESTful query logic (to replace scraping logic)
+    def query_show_info(show_id)
+        url = 'https://archive.org/metadata/' + show_id
+        response = HTTParty.get(url)
 
         show_data = {
-            date: extract_metadata(doc, itemprop: 'datePublished'),
-            location: extract_metadata(doc, label: 'Location'),
-            venue: extract_metadata(doc, label: 'Venue'),
-            transferred_by: extract_metadata(doc, label: 'Transferred by'),
-            duration: extract_metadata(doc, label: 'Run time'),
-            tracks: extract_track_data(track_divs)
+            date: response["metadata"]["date"],
+            location: response["metadata"]["coverage"],
+            venue: response["metadata"]["venue"],
+            transferred_by: response["metadata"]["transferer"],
+            duration: response["metadata"]["runtime"],
+            dir: response["metadata"]["identifier"],
+            files: response["files"]
         }
 
         return show_data
     rescue => e
-        puts "\n❌ Data extraction failed: #{e.message}"
+        puts "\n❌ Query failed: #{e.message}"
     end
 
-    private 
+    # Returns a show_data object for helping in the creation of a new Show
+    # def scrape_show_info(show_link)
+    #     doc = get_page_source(show_link)
+    #     track_divs = doc.css('div[itemprop="track"]')
 
+    #     show_data = {
+    #         date: extract_metadata(doc, itemprop: 'datePublished'),
+    #         location: extract_metadata(doc, label: 'Location'),
+    #         venue: extract_metadata(doc, label: 'Venue'),
+    #         transferred_by: extract_metadata(doc, label: 'Transferred by'),
+    #         duration: extract_metadata(doc, label: 'Run time'),
+    #         tracks: extract_track_data(track_divs)
+    #     }
+
+    #     return show_data
+    # rescue => e
+    #     puts "\n❌ Data extraction failed: #{e.message}"
+    # end
+
+    private 
     # Returns nokogiri-fied page HTML for use in scraping show info
     def get_page_source(show_link)
         return Nokogiri::HTML(HTTParty.get(show_link).body)

@@ -25,7 +25,7 @@ class CLI
 
     # Creates new show object with link given populated with metadata and track details
     def scrape_links
-        @show = Show.new(@args[:show])
+        @show = Show.new(@args[:show], @args[:format])
         puts "\n💿 #{@show.tracks.length} tracks found!"
     rescue => e
         puts "\n❌ Scraping failed: #{e.message}"
@@ -33,15 +33,11 @@ class CLI
 
     # Validates format isn't for test, and passes directory + format arguments to the download method of a Show
     def download_show
-        download_format = @args[:format]
-
-        if download_format == "test"
-          puts "Test Download, skipping"
-        elsif @show.has_format?(download_format)
-            download_path = setup_directories(@show)
-            @show.download_tracks(download_path, download_format)
+        if @args[:format] == "test"
+          puts "Test Download, skipping"   
         else
-            puts "\n❌ #{download_format} not found for this show! #{@show.tracks[0].available_formats} available"
+            download_directory = setup_directories(@show)
+            @show.download_tracks(download_directory)
         end
     end
 
