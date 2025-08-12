@@ -24,7 +24,7 @@ class CLI
     end
 
     # Creates new show object with link given populated with metadata and track details
-    def scrape_links
+    def create_show
         @show = Show.new(@args[:show], @args[:format])
         puts "\n💿 #{@show.tracks.length} tracks found!"
     rescue => e

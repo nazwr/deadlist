@@ -17,11 +17,6 @@ class Show
         set_show_info
     end
 
-    # Returns whether or not a given format is available for this show
-    def has_format?(requested_format)
-      @tracks[0].has_format?(requested_format)
-    end
-
     # Initializes a Downloader and passes track details
     def download_tracks(path)
         dl = Downloader.new(path, @format)

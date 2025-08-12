@@ -19,7 +19,13 @@ class DeadList
         session = CLI.new(@current_version, ARGV)
 
         # Scrape links and metadata for given show
-        session.scrape_links
+        session.create_show
+
+        # In future, consider starting multiple downloaders for a list of shows
+        # show_list = session.args[:shows]
+        # show_list.each do |show|
+        #   session.download_show(show)
+        # end
 
         # Create folder with show date and begin track downloads if format matches
         session.download_show
