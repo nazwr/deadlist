@@ -2,6 +2,7 @@ require_relative 'cli/client'
 require_relative 'cli/downloader'
 require_relative 'models/show'
 require_relative 'models/track'
+require_relative 'cli/argument_parser.rb'
 require 'fileutils'
 require 'optparse'
 
@@ -47,27 +48,7 @@ class CLI
 
     # Reads arguments passed at the command line and maps them to an instance object
     def parse_arguments(args)
-        params = {}
-
-        OptionParser.new do |opts|
-            opts.on("-iID", "--id ID", "ID of show to download. Required.")
-            opts.on('-fFORMAT', "--format FORMAT", "FORMAT to download show in. Required.")
-
-
-            opts.on("-h", "--help", "Prints this help") do
-                puts "\n"
-                puts opts
-                puts "\n"
-                exit
-            end
-
-            opts.on('-v', '--version', "Show version") do
-              puts @version
-              exit
-            end
-        end.parse!(into: params)
-
-        @args =  params
+        @args = ArgumentParser.parse(args, @version)
     end
 
     # Configures directories that will be used by the downloader
