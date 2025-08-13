@@ -2,7 +2,9 @@ require_relative 'cli/client'
 require_relative 'cli/downloader'
 require_relative 'models/show'
 require_relative 'models/track'
+require_relative 'cli/argument_parser.rb'
 require 'fileutils'
+require 'optparse'
 
 # The CLI is the 'session' created by the main class, managing arguments passed in and housing methods for scraping and downloading shows.
 class CLI
@@ -15,18 +17,11 @@ class CLI
         parse_arguments(args)
     end
 
-    # Reads arguments passed at the command line and maps them to an instance object
-    def parse_arguments(args)
-        args.each do |arg|
-            key, value = arg.split('=')
-            @args[key.tr('--', '').to_sym] = value
-        end
-    end
-
     # Creates new show object with link given populated with metadata and track details
     def create_show
-        @show = Show.new(@args[:show], @args[:format])
-        puts "\n💿 #{@show.tracks.length} tracks found!"
+        @show = Show.new(@args[:id], @args[:format])
+
+        puts "\n💿 #{@show.name} - #{@show.tracks.length} tracks found!"
     rescue => e
         puts "\n❌ Scraping failed: #{e.message}"
     end
@@ -49,6 +44,11 @@ class CLI
         puts '='*52
         puts "🌹⚡️ One man gathers what another man spills... ⚡️🌹"
         puts '='*52
+    end
+
+    # Reads arguments passed at the command line and maps them to an instance object
+    def parse_arguments(args)
+        @args = ArgumentParser.parse(args, @version)
     end
 
     # Configures directories that will be used by the downloader

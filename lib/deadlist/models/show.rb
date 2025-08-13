@@ -23,6 +23,7 @@ class Show
 
         @tracks.each do |track|
             download_url = "https://archive.org/download/" + @show_id + "/"
+            
             dl.get(download_url, track)
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
