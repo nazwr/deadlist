@@ -1,5 +1,5 @@
 # deadlist
-A client for interacting with Grateful Dead recordings hosted by archive.org.
+A client for downloading Grateful Dead recordings hosted by archive.org.
 
 > [!WARNING]  
 > 🚧 DeadList is very much a work in progress!
