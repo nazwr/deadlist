@@ -35,9 +35,3 @@ A client for downloading Grateful Dead recordings hosted by archive.org.
 * Get lists of uploads by date
 * Get setlists for a specific date
 * Get lists of recordings for specific shows, including set lists and information about the upload, transferrer etc.
-
-
-
-
-* -f | --format {format} | (required) | | Format for track downloads, typically .mp3, .ogg or .flac
-* -id | --id {show identifier} | {required} | Identifier of show to be downloaded
