@@ -20,10 +20,9 @@ class Show
     # Initializes a Downloader and passes track details
     def download_tracks(path)
         dl = Downloader.new(path, @format)
+        download_url = dl.download_url_for_show(@show_id)
 
         @tracks.each do |track|
-            download_url = "https://archive.org/download/" + @show_id + "/"
-            
             dl.get(download_url, track)
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
