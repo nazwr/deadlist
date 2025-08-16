@@ -19,7 +19,8 @@ class CLI
 
     # Creates new show object with link given populated with metadata and track details
     def create_show
-        @show = Show.new(@args[:id], @args[:format])
+        extracted_id = extract_show_id(@args[:id])
+        @show = Show.new(extracted_id, @args[:format])
 
         puts "\n💿 #{@show.name} - #{@show.tracks.length} tracks found!"
     rescue => e
@@ -34,6 +35,8 @@ class CLI
             download_directory = setup_directories(@show)
             @show.download_tracks(download_directory)
         end
+    rescue => e
+        puts "\n❌ Download failed: #{e.message}"
     end
 
     private
@@ -47,6 +50,14 @@ class CLI
     end
 
     # Reads arguments passed at the command line and maps them to an instance object
+    def extract_show_id(show_input)
+        if show_input.include?('archive.org/details/')
+            show_input.split('/details/').last
+        else
+            show_input
+        end
+    end 
+    
     def parse_arguments(args)
         @args = ArgumentParser.parse(args, @version)
     end
@@ -62,5 +73,7 @@ class CLI
         FileUtils.mkdir_p(show_dir)
 
         return show_dir
+    rescue => e
+        puts "\n❌ Directory creation failed: #{e.message}"
     end
 end

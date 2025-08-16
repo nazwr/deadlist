@@ -5,6 +5,14 @@ class Client
         url = 'https://archive.org/metadata/' + show_id
         response = HTTParty.get(url)
 
+        unless response.success?
+            raise "API request failed: #{response.code}"
+        end
+
+        unless response["metadata"]
+            raise "Invalid show ID: #{show_id}"
+        end
+
         show_data = {
             date: response["metadata"]["date"],
             location: response["metadata"]["coverage"],
@@ -16,7 +24,7 @@ class Client
         }
 
         return show_data
-    rescue => e
-        puts "\n❌ Query failed: #{e.message}"
+    rescue HTTParty::Error, StandardError => e
+        raise "Failed to fetch show data: #{e.message}"
     end
 end
