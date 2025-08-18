@@ -1,0 +1,29 @@
+name: Publish Gem
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.2
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: true
+    
+    - name: Build gem
+      run: gem build deadlist.gemspec
+    
+    - name: Publish to RubyGems
+      run: |
+        mkdir -p ~/.gem
+        echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.gem/credentials
+        chmod 0600 ~/.gem/credentials
+        gem push *.gem
