@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "deadlist"
-  s.version     = "1.0.1" # Reference constant
+  s.version     = "1.1.0" # Reference constant
   s.summary     = "Download Grateful Dead shows from archive.org"
   s.description = "A Ruby gem for downloading Grateful Dead concert recordings from the Internet Archive"
   s.authors     = ["nazwr"]

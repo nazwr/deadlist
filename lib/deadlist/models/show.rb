@@ -20,10 +20,9 @@ class Show
     # Initializes a Downloader and passes track details
     def download_tracks(path)
         dl = Downloader.new(path, @format)
+        download_url = dl.download_url_for_show(@show_id)
 
         @tracks.each do |track|
-            download_url = "https://archive.org/download/" + @show_id + "/"
-            
             dl.get(download_url, track)
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
@@ -34,7 +33,6 @@ class Show
 
     # On initialization, show variables are extracted from the HTML data scraped by the Client.
     def set_show_info
-        # show_data = Client.new.scrape_show_info(@show_link)
         show_data = Client.new.query_show_info(@show_id)
 
         @date = show_data[:date]
@@ -51,19 +49,24 @@ class Show
     
     # Converts track lists to Track objects
     def set_tracks(files)
-        format_length = -(@format.length)
-        tracks = []
-
-        files.each do |file_object|
-          if  file_object["name"][format_length..] == @format
-            tracks << file_object
-          end
+        audio_files = files.select { |file| audio_file?(file) }
+                            .select { |file| matches_format?(file, @format) }
+                            
+        if audio_files.empty?
+            puts "❌ No #{@format} files found"
+            return []
         end
+  
+        @tracks = audio_files.map { |track| Track.new(track) }
+    end
 
-        if tracks.length == 0
-          puts "❌ Error! Could not find any files matching requested format. Please select an alternate format."
-        else
-            @tracks = tracks.map { |track| Track.new(track) }
-        end
+    private
+
+    def audio_file?(file)
+        %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.'))
+    end
+
+    def matches_format?(file, format)
+        File.extname(file["name"]).delete('.') == format
     end
 end
