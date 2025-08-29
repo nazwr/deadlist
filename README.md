@@ -1,10 +1,6 @@
 # deadlist
 A client for downloading Grateful Dead recordings hosted by archive.org.
 
-> [!WARNING]  
-> 🚧 DeadList is very much a work in progress!
-> Check back soon
-
 ## Using Deadlist, you can
 * Download audio files in any of the formats available, regardless of if they have been marked as "Stream Only".
 
