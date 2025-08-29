@@ -13,6 +13,9 @@ This repository could also be cloned and run directly.
   * Run DeadList with: `./lib/deadlist.rb -f [format] -i [identifier]`
 
 ## Usage
+### Download a show in mp3
+`deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16`
+
 | Name              | Arguments     | Usage                                                      |
 | ----------------- | ------------- | ---------------------------------------------------------- |
 | Format (required) | -f, --format  | Format for track downloads, typically .mp3, .ogg or .flac  |
