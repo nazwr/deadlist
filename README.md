@@ -8,11 +8,13 @@ A client for downloading Grateful Dead recordings hosted by archive.org.
 ## Using Deadlist, you can
 * Download audio files in any of the formats available, regardless of if they have been marked as "Stream Only".
 
-## How to install
-* DeadList is available as a gem! Run `gem install deadlist` to get the most recent version available
-* This repository can be cloned and run directly.
+## Install
+As a gem:
+`gem install deadlist`
+
+This repository could also be cloned and run directly.
   * Clone repository: `git clone https://github.com/nazwr/deadlist.git`
-  * Move into parent directory: `cd ./deadlist`
+  * Move into repo: `cd ./deadlist`
   * Run DeadList with: `./lib/deadlist.rb -f [format] -i [identifier]`
 
 ## Arguments
