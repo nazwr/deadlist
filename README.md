@@ -1,8 +1,7 @@
 # deadlist
 A client for downloading Grateful Dead recordings hosted by archive.org.
 
-## Using Deadlist, you can
-* Download audio files in any of the formats available, regardless of if they have been marked as "Stream Only".
+With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only".
 
 ## Install
 As a gem:
@@ -13,7 +12,7 @@ This repository could also be cloned and run directly.
   * Move into repo: `cd ./deadlist`
   * Run DeadList with: `./lib/deadlist.rb -f [format] -i [identifier]`
 
-## Arguments
+## Usage
 | Name              | Arguments     | Usage                                                      |
 | ----------------- | ------------- | ---------------------------------------------------------- |
 | Format (required) | -f, --format  | Format for track downloads, typically .mp3, .ogg or .flac  |
@@ -23,13 +22,7 @@ This repository could also be cloned and run directly.
 
 
 ## How do I find the identifier of the show I want to download?
-* IDs can be found in the details section at the bottom of the page (just about reviews), alongside 'Lineage' and 'Transferred by' etc.
+* IDs can be found in the details section at the bottom of the page (just above reviews), alongside 'Lineage' and 'Transferred by' etc.
 * ID's can also be found in the web-address of the archive.org page, just after `/details/`
-  * Given a show https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16
-  * Then the identifier would be `gd1977-05-09.123480.sbd.miller.flac16` 
-
-## In the future, you should be able to use Deadlist to
-* Get formats a show is available in
-* Get lists of uploads by date
-* Get setlists for a specific date
-* Get lists of recordings for specific shows, including set lists and information about the upload, transferrer etc.
+  * Given a show `https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16`
+  * Then the identifier is `gd1977-05-09.123480.sbd.miller.flac16` 
