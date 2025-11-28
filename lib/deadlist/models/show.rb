@@ -57,7 +57,7 @@ class Show
             return []
         end
   
-        @tracks = audio_files.map { |track| Track.new(track) }
+        @tracks = audio_files.map_with_index(1) { |track, index| Track.new(track, index) }
     end
 
     def audio_file?(file)
