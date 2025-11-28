@@ -1,9 +1,8 @@
 require 'httparty'
-require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-require_relative 'deadlist/cli.rb'
+require_relative 'deadlist/cli'
 
 # Main DeadList class.
 class DeadList

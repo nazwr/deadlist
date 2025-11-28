@@ -20,6 +20,6 @@ class Downloader
 
         IO.copy_stream(download, filename)
     rescue => e
-        puts "❌ Download failed: #{e.message}"
+        puts "❌ Download failed for '#{track_object.title}': #{e.message}"
     end
 end

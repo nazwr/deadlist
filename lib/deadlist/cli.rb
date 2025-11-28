@@ -2,7 +2,7 @@ require_relative 'cli/client'
 require_relative 'cli/downloader'
 require_relative 'models/show'
 require_relative 'models/track'
-require_relative 'cli/argument_parser.rb'
+require_relative 'cli/argument_parser'
 require 'fileutils'
 require 'optparse'
 
@@ -72,7 +72,7 @@ class CLI
         show_dir = File.join(shows_dir, show.name)
         FileUtils.mkdir_p(show_dir)
 
-        return show_dir
+        show_dir
     rescue => e
         puts "\n❌ Directory creation failed: #{e.message}"
     end

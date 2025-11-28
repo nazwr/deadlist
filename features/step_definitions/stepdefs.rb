@@ -1,4 +1,4 @@
-require './lib/deadlist.rb'
+require './lib/deadlist'
 
 Given("DeadList is initialized") do
   @deadlist = DeadList.new

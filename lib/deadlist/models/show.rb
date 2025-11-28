@@ -1,5 +1,7 @@
 # Object to handle Show data and the array of Track objects to be used in downloading.
 class Show
+    AUDIO_FORMATS = %w[mp3 flac ogg m4a].freeze
+
     attr_reader :name, :venue, :date, :location, :duration, :transferred_by, :tracks, :available_formats
 
     def initialize(show_id, format)
@@ -23,6 +25,8 @@ class Show
         download_url = dl.download_url_for_show(@show_id)
 
         @tracks.each do |track|
+            puts "⬇️ Downloading #{track.pos} - #{track.title}..."
+
             dl.get(download_url, track)
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
@@ -42,7 +46,7 @@ class Show
         @transferred_by = show_data[:transferred_by]
         @name = "#{show_data[:date]} - #{show_data[:venue]} - #{show_data[:location]}"
         @tracks = set_tracks(show_data[:files])
-        @url = "https://archive.org/metadata/" + show_data[:dir] + "/"
+        @url = "https://archive.org/metadata/#{show_data[:dir]}/"
 
         puts "🌹💀 Downloading #{name}"
     end
@@ -57,16 +61,14 @@ class Show
             return []
         end
   
-        @tracks = audio_files.map { |track| Track.new(track) }
+        @tracks = audio_files.map.with_index(1) { |track, index| Track.new(track, index) }
     end
 
-    private
-
     def audio_file?(file)
-        %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.'))
+        AUDIO_FORMATS.include?(File.extname(file["name"]).delete('.').downcase)
     end
 
     def matches_format?(file, format)
-        File.extname(file["name"]).delete('.') == format
+        File.extname(file["name"]).delete('.').downcase == format
     end
 end
