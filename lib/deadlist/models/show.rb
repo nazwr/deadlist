@@ -61,10 +61,10 @@ class Show
     end
 
     def audio_file?(file)
-        %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.'))
+        %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.').downcase)
     end
 
     def matches_format?(file, format)
-        File.extname(file["name"]).delete('.') == format
+        File.extname(file["name"]).delete('.').downcase == format
     end
 end
