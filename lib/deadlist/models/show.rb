@@ -1,5 +1,7 @@
 # Object to handle Show data and the array of Track objects to be used in downloading.
 class Show
+    AUDIO_FORMATS = %w[mp3 flac ogg m4a].freeze
+
     attr_reader :name, :venue, :date, :location, :duration, :transferred_by, :tracks, :available_formats
 
     def initialize(show_id, format)
@@ -61,7 +63,7 @@ class Show
     end
 
     def audio_file?(file)
-        %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.').downcase)
+        AUDIO_FORMATS.include?(File.extname(file["name"]).delete('.').downcase)
     end
 
     def matches_format?(file, format)
