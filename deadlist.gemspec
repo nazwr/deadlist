@@ -13,5 +13,4 @@ Gem::Specification.new do |s|
   
   # Add dependencies
   s.add_dependency 'httparty', '~> 0.21'
-  s.add_dependency 'nokogiri', '~> 1.10'
 end
