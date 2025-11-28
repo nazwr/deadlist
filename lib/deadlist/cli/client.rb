@@ -22,7 +22,7 @@ class Client
             files: response["files"]
         }
 
-        return show_data
+        show_data
     rescue HTTParty::Error, StandardError => e
         raise "Failed to fetch show data: #{e.message}"
     end

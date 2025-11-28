@@ -72,7 +72,7 @@ class CLI
         show_dir = File.join(shows_dir, show.name)
         FileUtils.mkdir_p(show_dir)
 
-        return show_dir
+        show_dir
     rescue => e
         puts "\n❌ Directory creation failed: #{e.message}"
     end
