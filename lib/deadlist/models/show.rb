@@ -60,8 +60,6 @@ class Show
         @tracks = audio_files.map { |track| Track.new(track) }
     end
 
-    private
-
     def audio_file?(file)
         %w[mp3 flac ogg m4a].include?(File.extname(file["name"]).delete('.'))
     end
