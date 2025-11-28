@@ -42,7 +42,7 @@ class Show
         @transferred_by = show_data[:transferred_by]
         @name = "#{show_data[:date]} - #{show_data[:venue]} - #{show_data[:location]}"
         @tracks = set_tracks(show_data[:files])
-        @url = "https://archive.org/metadata/" + show_data[:dir] + "/"
+        @url = "https://archive.org/metadata/#{show_data[:dir]}/"
 
         puts "🌹💀 Downloading #{name}"
     end

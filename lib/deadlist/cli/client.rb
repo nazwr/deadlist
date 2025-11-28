@@ -1,7 +1,7 @@
 # The Client class manages HTML scraping and parsing for the CLI and other classes above it. Any HTML work should be handled here.
 class Client
     def query_show_info(show_id)
-        url = 'https://archive.org/metadata/' + show_id
+        url = "https://archive.org/metadata/#{show_id}"
         response = HTTParty.get(url)
 
         unless response.success?
