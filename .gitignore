@@ -1,3 +1,4 @@
 /vendor
 /shows
 .env
+.DS_Store

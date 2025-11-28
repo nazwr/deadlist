@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby '>= 2.7.0'
 
-group :test 
+group :test do 
     gem 'cucumber'
     gem 'rspec'
     gem "rspec-expectations"
