@@ -25,6 +25,8 @@ class Show
         download_url = dl.download_url_for_show(@show_id)
 
         @tracks.each do |track|
+            puts "⬇️ Downloading #{track.pos} - #{track.title}..."
+
             dl.get(download_url, track)
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
