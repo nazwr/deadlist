@@ -2,7 +2,7 @@ require_relative 'cli/client'
 require_relative 'cli/downloader'
 require_relative 'models/show'
 require_relative 'models/track'
-require_relative 'cli/argument_parser.rb'
+require_relative 'cli/argument_parser'
 require 'fileutils'
 require 'optparse'
 
