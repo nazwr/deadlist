@@ -1,4 +1,7 @@
 # deadlist
+
+[![Coverage Status](https://coveralls.io/repos/github/nazwr/deadlist/badge.svg?branch=main)](https://coveralls.io/github/nazwr/deadlist?branch=main)
+
 A client for downloading Grateful Dead recordings hosted by archive.org.
 
 With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the location deadlist was executed from.
@@ -58,5 +61,20 @@ bundle exec cucumber features/argument_parsing.feature
 Current test coverage includes:
 - Argument parsing and validation
 - Show metadata extraction from archive.org API
+- Track filtering by audio format
+- Directory creation and organization
+- Download functionality
+- Error handling for invalid inputs and API failures
 - Version output
-- Error handling for invalid inputs and API failures 
+
+**49 scenarios, 192 steps, 89%+ code coverage**
+
+### Viewing Coverage Reports
+After running tests, view the coverage report locally:
+
+```bash
+open coverage/index.html  # macOS
+xdg-open coverage/index.html  # Linux
+```
+
+Coverage is also automatically tracked on [Coveralls](https://coveralls.io/github/nazwr/deadlist) for all pull requests and main branch pushes. 
