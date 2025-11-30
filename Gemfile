@@ -2,10 +2,10 @@ source "https://rubygems.org"
 
 ruby '>= 2.7.0'
 
-group :test do 
-    gem 'cucumber'
-    gem 'rspec'
-    gem "rspec-expectations"
+group :test do
+    gem 'cucumber', '~> 9.0'
+    gem 'rspec', '~> 3.0'
+    gem "rspec-expectations", '~> 3.0'
     gem 'drb'
     gem 'logger'
 end

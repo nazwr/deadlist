@@ -5,9 +5,9 @@ Given("DeadList is initialized") do
 end
 
 When("the --version method is called") do
-  @version = @deadlist.version
+  @version = @deadlist.current_version
 end
 
 Then('a semantic version v1.X.X etc. should be output') do
-  expect(@version).to eq('v1.0.0')
+  expect(@version).to eq('1.1.0')
 end

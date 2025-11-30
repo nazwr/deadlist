@@ -24,4 +24,39 @@ With Deadlist, you can download audio files in any of the formats available, reg
 * IDs can be found in the details section at the bottom of the page (just above reviews), alongside 'Lineage' and 'Transferred by' etc.
 * ID's can also be found in the web-address of the archive.org page, just after `/details/`
   * Given a show `https://archive.org/details/gd1977-05-09.123480.sbd.miller.flac16`
-  * Then the identifier is `gd1977-05-09.123480.sbd.miller.flac16` 
+  * Then the identifier is `gd1977-05-09.123480.sbd.miller.flac16`
+
+## Development
+
+### Setup
+DeadList requires Ruby >= 2.7.0. To set up the development environment:
+
+```bash
+bundle install
+```
+
+### Running Tests
+DeadList uses Cucumber for BDD testing. To run the full test suite:
+
+```bash
+./script/test
+```
+
+Or run Cucumber directly:
+
+```bash
+bundle exec cucumber features/
+```
+
+To run a specific feature:
+
+```bash
+bundle exec cucumber features/argument_parsing.feature
+```
+
+### Test Coverage
+Current test coverage includes:
+- Argument parsing and validation
+- Show metadata extraction from archive.org API
+- Version output
+- Error handling for invalid inputs and API failures 

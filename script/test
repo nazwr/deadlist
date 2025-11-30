@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Run all cucumber tests
+
+set -e  # Exit on error
+
+echo "Running DeadList tests..."
+bundle exec cucumber features/
+
+echo ""
+echo "✅ All tests passed!"

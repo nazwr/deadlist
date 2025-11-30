@@ -6,6 +6,8 @@ require_relative 'deadlist/cli'
 
 # Main DeadList class.
 class DeadList
+    attr_reader :current_version
+
     def initialize
         @current_version = '1.1.0'
     end
