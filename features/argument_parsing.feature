@@ -37,3 +37,8 @@ Feature: Argument parsing
     Given the --version flag is provided
     When the arguments are parsed with exit handling
     Then it should display the version number
+
+  Scenario: Invalid option is rejected
+    Given arguments with invalid option "--invalid-flag"
+    When the arguments are parsed with error handling
+    Then it should exit with an error about invalid option

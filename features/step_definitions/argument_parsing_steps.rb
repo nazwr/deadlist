@@ -117,3 +117,13 @@ Then('it should display the version number') do
   output_string = @output.join("\n")
   expect(output_string).to match(/deadlist v1\.1\.0/)
 end
+
+# Invalid option scenario
+Given('arguments with invalid option {string}') do |invalid_option|
+  @args = [invalid_option, '--id', 'test', '--format', 'mp3']
+end
+
+Then('it should exit with an error about invalid option') do
+  expect(@exit_called).to be true
+  expect(@error_message).to match(/invalid option/)
+end
