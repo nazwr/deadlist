@@ -167,7 +167,7 @@ When('I call the run method') do
 end
 
 Then('it should create a CLI session') do
-  expect(CLI).to have_received(:new).with('1.1.0', ['--id', 'test', '--format', 'mp3'])
+  expect(CLI).to have_received(:new).with(@deadlist.current_version, ['--id', 'test', '--format', 'mp3'])
 end
 
 Then('it should call create_show on the session') do
