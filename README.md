@@ -72,6 +72,9 @@ Coverage is also automatically tracked on [Coveralls](https://coveralls.io/githu
 
 ## Releasing
 
+### Working on a New Release
+When working on a new release, its best to have a release/x.x.x branch to work from as releases should build from main. Feature branches should be worked on under the release branch until they are ready to be released through the process described below.
+
 ### Creating a New Release
 
 To publish a new version of DeadList to RubyGems:
