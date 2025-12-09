@@ -4,7 +4,7 @@
 set -e  # Exit on error
 
 echo "Running DeadList tests..."
-bundle exec cucumber features/
+bundle exec cucumber --format progress --publish-quiet  
 
 echo ""
 echo "✅ All tests passed!"

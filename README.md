@@ -77,4 +77,37 @@ open coverage/index.html  # macOS
 xdg-open coverage/index.html  # Linux
 ```
 
-Coverage is also automatically tracked on [Coveralls](https://coveralls.io/github/nazwr/deadlist) for all pull requests and main branch pushes. 
+Coverage is also automatically tracked on [Coveralls](https://coveralls.io/github/nazwr/deadlist) for all pull requests and main branch pushes.
+
+## Releasing
+
+### Creating a New Release
+
+To publish a new version of DeadList to RubyGems:
+
+1. **Update the version** in `lib/deadlist/version.rb`:
+   ```ruby
+   class DeadList
+     VERSION = '1.2.0'  # Update to your new version
+   end
+   ```
+
+2. **Commit and push your changes**:
+   ```bash
+   git add lib/deadlist/version.rb
+   git commit -m "Bump version to 1.2.0"
+   git push origin main
+   ```
+
+3. **Create and push a version tag**:
+   ```bash
+   git tag v1.2.0
+   git push origin v1.2.0
+   ```
+
+4. **GitHub Actions automatically handles the rest**:
+   - Builds the gem with `gem build deadlist.gemspec`
+   - Publishes to RubyGems using your `RUBYGEMS_API_KEY` secret
+   - The new version will be available via `gem install deadlist`
+
+**Note:** The tag must start with `v` (e.g., `v1.2.0`) to trigger the publish workflow. 
