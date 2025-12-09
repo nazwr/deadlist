@@ -31,6 +31,8 @@ class Show
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
         end
+
+        puts "⚡️ Show downloaded successfully!"
     end
 
     private
