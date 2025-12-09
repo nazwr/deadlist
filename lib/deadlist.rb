@@ -2,6 +2,7 @@ require 'httparty'
 require 'open-uri'
 require 'pry'
 
+require_relative 'deadlist/version'
 require_relative 'deadlist/cli'
 
 # Main DeadList class.
@@ -9,15 +10,15 @@ class DeadList
     attr_reader :current_version
 
     def initialize
-        @current_version = '1.1.0'
+        @current_version = VERSION
     end
 
     # Argument abstraction should probably happen at this level!
 
-    def run        
+    def run(argv = ARGV)
         # Start a new CLI session
         # In future this could be abstracted to pass the show link vs all args, so a 'session' is started per show.
-        session = CLI.new(@current_version, ARGV)
+        session = CLI.new(@current_version, argv)
 
         # Scrape links and metadata for given show
         session.create_show

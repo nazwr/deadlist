@@ -161,10 +161,8 @@ Given('I mock the CLI flow') do
 end
 
 When('I call the run method') do
-  @output = with_argv(['--id', 'test', '--format', 'mp3']) do
-    capture_output do
-      @deadlist.run
-    end
+  @output = capture_output do
+    @deadlist.run(['--id', 'test', '--format', 'mp3'])
   end
 end
 
