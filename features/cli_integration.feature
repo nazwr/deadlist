@@ -10,6 +10,7 @@ Feature: End-to-end CLI integration
     And it should create a show with metadata
     And it should set up the directory structure
     And it should initiate the download process
+    And it should display "⚡️ Show downloaded successfully!" message
     And the process should complete without errors
 
   Scenario: Full flow with invalid show ID
