@@ -58,16 +58,7 @@ bundle exec cucumber features/argument_parsing.feature
 ```
 
 ### Test Coverage
-Current test coverage includes:
-- Argument parsing and validation
-- Show metadata extraction from archive.org API
-- Track filtering by audio format
-- Directory creation and organization
-- Download functionality
-- Error handling for invalid inputs and API failures
-- Version output
-
-**49 scenarios, 192 steps, 89%+ code coverage**
+Current test coverage includes core functionality of DeadList and should be run when updating or adding new features.
 
 ### Viewing Coverage Reports
 After running tests, view the coverage report locally:
