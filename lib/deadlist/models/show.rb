@@ -23,14 +23,19 @@ class Show
     def download_tracks(path)
         dl = Downloader.new(path, @format)
         download_url = dl.download_url_for_show(@show_id)
+        succesful_downloads = 0
 
         @tracks.each do |track|
             puts "⬇️ Downloading #{track.pos} - #{track.title}..."
 
-            dl.get(download_url, track)
+            if dl.get(download_url, track)
+                succesful_downloads += 1
+            end
 
             puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
         end
+
+        puts "\n✅ Downloaded #{succesful_downloads}/#{@tracks.length} tracks successfully!"
     end
 
     private

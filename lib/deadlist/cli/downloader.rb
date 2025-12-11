@@ -16,10 +16,13 @@ class Downloader
     def get(root_url, track_object)
         uri = URI.parse(root_url + track_object.filename); raise ArgumentError, "Only HTTP(S) URLs allowed" unless uri.is_a?(URI::HTTP)
         download = uri.open
-        filename = "#{@path}/#{track_object.pos} -- #{track_object.title}.#{@format}"
+        sanitized_title = track_object.title.gsub('/', '-')
+        filename = "#{@path}/#{track_object.pos} -- #{sanitized_title}.#{@format}"
 
         IO.copy_stream(download, filename)
+        true
     rescue => e
         puts "❌ Download failed for '#{track_object.title}': #{e.message}"
+        false
     end
 end

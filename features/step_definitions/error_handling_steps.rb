@@ -188,7 +188,7 @@ Given('a CLI instance with invalid arguments') do
   # Create CLI instance
   args = ['--id', 'invalid-show', '--format', 'mp3']
   suppress_output do
-    @cli = CLI.new('1.1.0', args)
+    @cli = CLI.new(DeadList::VERSION, args)
   end
 end
 
@@ -226,7 +226,7 @@ Given('a CLI instance with a valid show') do
 
   args = ['--id', 'gd1977-05-08', '--format', 'mp3']
   suppress_output do
-    @cli = CLI.new('1.1.0', args)
+    @cli = CLI.new(DeadList::VERSION, args)
   end
 
   # Inject the mock show
