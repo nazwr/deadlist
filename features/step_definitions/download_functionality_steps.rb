@@ -40,7 +40,8 @@ end
 When('the file is downloaded') do
   # We're testing the filename construction, not actual download
   # The filename is constructed in the get method
-  @expected_filename = "#{@path}/#{@track.pos} -- #{@track.title}.#{@format}"
+  sanitized_title = @track.title.gsub('/', '-')
+  @expected_filename = "#{@path}/#{@track.pos} -- #{sanitized_title}.#{@format}"
 end
 
 Then('the file should be saved as {string}') do |expected_name|
