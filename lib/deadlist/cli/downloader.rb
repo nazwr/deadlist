@@ -19,7 +19,9 @@ class Downloader
         filename = "#{@path}/#{track_object.pos} -- #{track_object.title}.#{@format}"
 
         IO.copy_stream(download, filename)
+        true
     rescue => e
         puts "❌ Download failed for '#{track_object.title}': #{e.message}"
+        false
     end
 end
