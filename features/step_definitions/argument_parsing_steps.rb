@@ -8,7 +8,7 @@ Given('valid arguments with id {string} and format {string}') do |id, format|
 end
 
 When('the arguments are parsed') do
-  @parsed_params = ArgumentParser.parse(@args, '1.1.0')
+  @parsed_params = ArgumentParser.parse(@args, DeadList::VERSION)
 end
 
 Then('the parsed parameters should include the id') do
@@ -44,7 +44,7 @@ When('the arguments are parsed with error handling') do
   $stdout = StringIO.new
 
   begin
-    ArgumentParser.parse(@args, '1.1.0')
+    ArgumentParser.parse(@args, DeadList::VERSION)
   rescue SystemExit => e
     @exit_called = true
     @exit_code = e.status
@@ -96,7 +96,7 @@ When('the arguments are parsed with exit handling') do
   $stdout = StringIO.new
 
   begin
-    ArgumentParser.parse(@args, '1.1.0')
+    ArgumentParser.parse(@args, DeadList::VERSION)
   rescue SystemExit => e
     @exit_called = true
   ensure
@@ -115,7 +115,7 @@ end
 Then('it should display the version number') do
   expect(@exit_called).to be true
   output_string = @output.join("\n")
-  expect(output_string).to match(/deadlist v1\.1\.0/)
+  expect(output_string).to match(/deadlist v#{DeadList::VERSION}/)
 end
 
 # Invalid option scenario
