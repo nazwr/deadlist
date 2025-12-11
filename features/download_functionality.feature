@@ -47,3 +47,9 @@ Feature: Download functionality
     When all tracks are downloaded
     Then all files should be in the same directory
     And each file should have a unique name based on position
+
+  Scenario: File naming with slash in title
+    Given a downloader with path "/tmp/shows/test" and format "mp3"
+    And a track with position "3", title "Me & My Uncle / Big River", and filename "track03.mp3"
+    When the file is downloaded
+    Then the file should be saved as "3 -- Me & My Uncle - Big River.mp3"
