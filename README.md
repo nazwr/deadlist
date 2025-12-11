@@ -19,6 +19,7 @@ With Deadlist, you can download audio files in any of the formats available, reg
 | ----------------- | ------------- | ---------------------------------------------------------- |
 | Format (required) | -f, --format  | Format for track downloads, typically .mp3, .ogg or .flac  |
 | ID (required)     | -i, --id      | Identifier of show to be downloaded.                       |
+| Output Directory. | -o, --output  | Location download should be saved to. Defaults to ./shows  |
 | Help              | -h, --help    | Show help documentation                                    |
 | Version           | -v, --version | Prints version of DeadList being run                       |
 

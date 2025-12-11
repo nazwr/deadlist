@@ -32,7 +32,7 @@ class CLI
         if @args[:format] == "test"
           puts "Test Download, skipping"   
         else
-            download_directory = setup_directories(@show)
+            download_directory = setup_directories(@show, @args[:directory])
             @show.download_tracks(download_directory)
         end
     rescue => e
@@ -63,17 +63,41 @@ class CLI
     end
 
     # Configures directories that will be used by the downloader
-    def setup_directories(show, base_path = Dir.pwd)
-        # Create base shows directory
-        shows_dir = File.join(base_path, "shows")
-        FileUtils.mkdir_p(shows_dir)
-        
-        # Create specific show directory
-        show_dir = File.join(shows_dir, show.name)
+    def setup_directories(show, custom_path = nil)
+        if custom_path
+            # Custom path: use it directly
+            base_dir = custom_path
+        else
+            # Default: add shows subdirectory
+            base_dir = File.join(Dir.pwd, "shows")
+        end
+
+        FileUtils.mkdir_p(base_dir)
+
+        show_dir = File.join(base_dir, show.name)
         FileUtils.mkdir_p(show_dir)
 
         show_dir
     rescue => e
         puts "\n❌ Directory creation failed: #{e.message}"
     end
+
+     def setup_directories(show, custom_path = nil)
+    # Use custom path or default to ./shows
+    if custom_path
+      base_dir = custom_path
+    else
+      base_dir = File.join(Dir.pwd, "shows")
+    end
+
+    FileUtils.mkdir_p(base_dir)
+
+    # Create specific show directory
+    show_dir = File.join(base_dir, show.name)
+    FileUtils.mkdir_p(show_dir)
+
+    show_dir
+  rescue => e
+    puts "\n❌ Directory creation failed: #{e.message}"
+  end
 end

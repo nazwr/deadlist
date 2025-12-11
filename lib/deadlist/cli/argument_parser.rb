@@ -18,6 +18,10 @@ class ArgumentParser
       opts.separator ""
       opts.separator "Other options:"
       
+      opts.on("-d", "--directory PATH", "Directory to save show(s) to. Will default to /shows/ in the execution directory") do |dir|
+        params[:directory] = dir
+      end
+
       opts.on("-h", "--help", "Show this help") do
         puts opts
         exit

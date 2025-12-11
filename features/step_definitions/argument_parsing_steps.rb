@@ -21,6 +21,16 @@ Then('the parsed parameters should include the format') do
   expect(@parsed_params[:format]).to be_a(String)
 end
 
+# Valid arguments with output path
+Given('valid arguments with id {string} and format {string} and directory {string}') do |id, format, directory|
+  @args = ['--id', id, '--format', format, '--directory', directory]
+end
+
+Then('the parsed parameters should include the output directory') do
+  expect(@parsed_params[:directory]).not_to be_nil
+  expect(@parsed_params[:directory]).to eq('/custom/path')
+end
+
 # Missing argument scenarios
 Given('arguments with only format {string}') do |format|
   @args = ['--format', format]
