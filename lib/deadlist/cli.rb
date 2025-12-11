@@ -81,23 +81,4 @@ class CLI
     rescue => e
         puts "\n❌ Directory creation failed: #{e.message}"
     end
-
-     def setup_directories(show, custom_path = nil)
-    # Use custom path or default to ./shows
-    if custom_path
-      base_dir = custom_path
-    else
-      base_dir = File.join(Dir.pwd, "shows")
-    end
-
-    FileUtils.mkdir_p(base_dir)
-
-    # Create specific show directory
-    show_dir = File.join(base_dir, show.name)
-    FileUtils.mkdir_p(show_dir)
-
-    show_dir
-  rescue => e
-    puts "\n❌ Directory creation failed: #{e.message}"
-  end
 end
