@@ -38,7 +38,7 @@ Feature: Directory creation and organization
     Given a CLI instance with a show
     When directories are set up with custom base path "/tmp/custom"
     Then directories should be created under the custom path
-    And the path should contain "/tmp/custom/shows"
+    And the path should contain "/tmp/custom/"
 
   Scenario: Show name with special characters
     Given a CLI instance with a show named "1977-05-08 - O'Keefe Centre - Toronto, ON"

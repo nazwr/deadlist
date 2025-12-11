@@ -42,3 +42,8 @@ Feature: Argument parsing
     Given arguments with invalid option "--invalid-flag"
     When the arguments are parsed with error handling
     Then it should exit with an error about invalid option
+  
+  Scenario: Output directory is optional
+    Given valid arguments with id "gd1977-05-08" and format "mp3" and directory "/custom/path"
+    When the arguments are parsed
+    Then the parsed parameters should include the output directory
