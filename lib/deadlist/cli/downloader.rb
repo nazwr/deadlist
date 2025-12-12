@@ -18,8 +18,7 @@ class Downloader
         download = uri.open
 
         # Extract disc number from filename
-        disc_match = track_object.filename.match(/d(\d+)t/)
-
+        disc_match = track_object.filename.match(/(?<!g)d(\d+)/)
         sanitized_title = track_object.title.gsub('/', '-')
 
         if disc_match

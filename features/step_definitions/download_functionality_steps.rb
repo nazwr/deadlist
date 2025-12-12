@@ -39,7 +39,7 @@ end
 
 When('the file is downloaded') do
   # Extract disc number from filename (e.g., "d1" from "gd76-09-25d1t01.mp3")
-  disc_match = @track.filename.match(/d(\d+)t/)  # ✅ Matches "d{digit}t" pattern
+  disc_match = @track.filename.match(/(?<!g)d(\d+)/)
 
   if disc_match
     # Multi-disc: use disc-track format (1-01, 2-01, etc.)
