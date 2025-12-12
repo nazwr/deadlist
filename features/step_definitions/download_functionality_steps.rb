@@ -38,11 +38,21 @@ Given('a track with position {string}, title {string}, and filename {string}') d
 end
 
 When('the file is downloaded') do
-  # We're testing the filename construction, not actual download
-  # The filename is constructed in the get method
-  sanitized_title = @track.title.gsub('/', '-')
-  @expected_filename = "#{@path}/#{@track.pos} -- #{sanitized_title}.#{@format}"
-end
+  # Extract disc number from filename (e.g., "d1" from "gd76-09-25d1t01.mp3")
+  disc_match = @track.filename.match(/d(\d+)t/)  # ✅ Matches "d{digit}t" pattern
+
+  if disc_match
+    # Multi-disc: use disc-track format (1-01, 2-01, etc.)
+    disc_num = disc_match[1]
+    padded_track = @track.pos.rjust(2, '0')
+    sanitized_title = @track.title.gsub('/', '-')
+    @expected_filename = "#{@path}/#{disc_num}-#{padded_track} -- #{sanitized_title}.#{@format}"
+  else
+    # Single disc: use regular format
+    sanitized_title = @track.title.gsub('/', '-')
+    @expected_filename = "#{@path}/#{@track.pos} -- #{sanitized_title}.#{@format}"
+  end
+  end
 
 Then('the file should be saved as {string}') do |expected_name|
   full_expected_path = "#{@path}/#{expected_name}"

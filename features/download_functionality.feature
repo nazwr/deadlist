@@ -53,3 +53,15 @@ Feature: Download functionality
     And a track with position "3", title "Me & My Uncle / Big River", and filename "track03.mp3"
     When the file is downloaded
     Then the file should be saved as "3 -- Me & My Uncle - Big River.mp3"
+  
+  Scenario: File naming with disc 1 track
+    Given a downloader with path "/tmp/shows/test" and format "mp3"
+    And a track with position "1", title "Bertha", and filename "gd76-09-25d1t01.mp3"
+    When the file is downloaded
+    Then the file should be saved as "1-01 -- Bertha.mp3"
+
+  Scenario: File naming with disc 2 track
+    Given a downloader with path "/tmp/shows/test" and format "mp3"
+    And a track with position "1", title "Let It Grow", and filename "gd76-09-25d2t01.mp3"
+    When the file is downloaded
+    Then the file should be saved as "2-01 -- Let It Grow.mp3"
