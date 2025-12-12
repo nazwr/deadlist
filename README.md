@@ -4,7 +4,7 @@
 
 A client for downloading Grateful Dead recordings hosted by archive.org.
 
-With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the location deadlist was executed from.
+With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the current directory by default, or to a custom location using the `--directory` flag.
 
 ## Install
 `gem install deadlist`
@@ -15,14 +15,25 @@ With Deadlist, you can download audio files in any of the formats available, reg
 
 ### Full list of arguments
 
-| Name              | Arguments     | Usage                                                      |
-| ----------------- | ------------- | ---------------------------------------------------------- |
-| Format (required) | -f, --format  | Format for track downloads, typically .mp3, .ogg or .flac  |
-| ID (required)     | -i, --id      | Identifier of show to be downloaded.                       |
-| Output Directory. | -o, --output  | Location download should be saved to. Defaults to ./shows  |
-| Help              | -h, --help    | Show help documentation                                    |
-| Version           | -v, --version | Prints version of DeadList being run                       |
+| Name              | Arguments       | Usage                                                      |
+| ----------------- | --------------- | ---------------------------------------------------------- |
+| Format (required) | -f, --format    | Format for track downloads, typically .mp3, .ogg or .flac  |
+| ID (required)     | -i, --id        | Identifier of show to be downloaded                        |
+| Directory         | -d, --directory | Custom download location. Defaults to ./shows              |
+| Help              | -h, --help      | Show help documentation                                    |
+| Version           | -v, --version   | Show version of DeadList                                   |
 
+
+### Advanced Usage
+#### Custom download location
+`deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16 -d /path/to/downloads`
+
+## Features
+- **Stream-only bypass**: Download files marked as "Stream Only" on archive.org
+- **Multi-disc support**: Automatically handles shows split into multiple discs/sets with proper track numbering (e.g., `1-01`, `2-01`)
+- **Smart file naming**: Sanitizes problematic characters (like slashes) in song titles
+- **Download tracking**: Shows progress with "Downloaded X/Y tracks successfully!" summary
+- **Customizable output**: Specify download location or use default `./shows/` directory
 
 ## How do I find the identifier of the show I want to download?
 * IDs can be found in the details section at the bottom of the page (just above reviews), alongside 'Lineage' and 'Transferred by' etc.
