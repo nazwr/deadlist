@@ -293,3 +293,13 @@ Then('the process should complete without downloads') do
   # No download errors, but also no actual downloads
   expect(@output).not_to include("Download failed")
 end
+
+Then('it should not display the startup banner') do
+  expect(@output).not_to include("One man gathers what another man spills")
+  expect(@output).not_to include("=" * 52)
+end
+
+Then('it should not display info messages') do
+  expect(@output).not_to include("tracks found")
+  expect(@output).not_to include("💿")
+end

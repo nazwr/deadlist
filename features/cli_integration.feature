@@ -76,3 +76,15 @@ Feature: End-to-end CLI integration
     And it should create the show successfully
     And it should display "Test Download, skipping" message
     And the process should complete without downloads
+
+  Scenario: Run with --quiet flag suppresses info messages
+    Given I have valid arguments "--id gd1977-05-08 --format mp3 --quiet"
+    When I run the DeadList CLI
+    Then it should not display the startup banner
+    And it should not display info messages
+
+  Scenario: Quiet mode still shows errors
+    Given I have arguments with invalid show ID "--id invalid-show --format mp3 --quiet"
+    When I run the DeadList CLI with error handling
+    Then it should display a scraping error message
+    And it should not display the startup banner
