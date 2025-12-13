@@ -31,6 +31,15 @@ Then('the parsed parameters should include the output directory') do
   expect(@parsed_params[:directory]).to eq('/custom/path')
 end
 
+# --dry-run flag
+Given('valid arguments with id {string} and format {string} and --dry-run flag') do |id, format|
+  @args = ['--id', id, '--format', format, '--dry-run']
+end
+
+Then('the parsed parameters should include dry_run as true') do
+  expect(@parsed_params[:dry_run]).to be true
+end
+
 # Missing argument scenarios
 Given('arguments with only format {string}') do |format|
   @args = ['--format', format]
@@ -136,4 +145,59 @@ end
 Then('it should exit with an error about invalid option') do
   expect(@exit_called).to be true
   expect(@error_message).to match(/invalid option/)
+end
+
+# Dry-run
+Given('a CLI instance with --dry-run flag') do
+  # Mock the Client to return test data
+  mock_show_data = {
+    date: "1977-05-08",
+    location: "Ithaca, NY",
+    venue: "Barton Hall",
+    transferred_by: "Test User",
+    duration: "3:05:00",
+    dir: "gd1977-05-08",
+    files: [
+      {"name" => "track01.mp3", "title" => "New Minglewood Blues", "track" => "1", "format" => "VBR MP3"},
+      {"name" => "track02.mp3", "title" => "Scarlet Begonias", "track" => "2", "format" => "VBR MP3"},
+      {"name" => "track03.mp3", "title" => "Fire On The Mountain", "track" => "3", "format" => "VBR MP3"}
+    ]}
+    
+  client_double = double('client')
+  allow(client_double).to receive(:query_show_info).and_return(mock_show_data)
+  allow(Client).to receive(:new).and_return(client_double)
+  
+  @output = StringIO.new
+  @test_logger = create_test_logger(@output)
+  @cli = CLI.new(DeadList::VERSION, ['--id', 'gd1977-05-08', '--format', 'mp3', '--dry-run'], logger: @test_logger)
+  @temp_dir = Dir.mktmpdir
+end
+
+When('the show is created and downloaded with dry-run') do
+  @cli.create_show
+  @cli.download_show
+end
+
+Then('it should display the track list') do
+  @output.rewind
+  output_text = @output.read
+
+  # Should show dry-run header with track count
+  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
+
+  # Should list each track
+  expect(output_text).to match(/New Minglewood Blues/)
+  expect(output_text).to match(/Scarlet Begonias/)
+  expect(output_text).to match(/Fire On The Mountain/)
+  end
+
+And('no files should be downloaded') do
+  @output.rewind
+  output_text = @output.read
+
+  # Verify dry-run message appears (proving we're in dry-run mode)
+  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
+
+  # Verify actual download messages DON'T appear
+  expect(output_text).not_to match(/⬇️ Downloading/)
 end
