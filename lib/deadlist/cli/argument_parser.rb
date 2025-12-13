@@ -35,6 +35,10 @@ class ArgumentParser
       opts.on('-q', '--quiet', 'Run silently') do
         params[:quiet] = true
       end
+
+      opts.on('--dry-run', 'List tracks to be downloaded') do
+        params[:dry_run] = true
+      end
     end
     
     parser.parse!(args)
