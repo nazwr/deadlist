@@ -3,7 +3,8 @@
 class Downloader
     BASE_API_URL = 'https://archive.org'
 
-    def initialize(path, format)
+    def initialize(path, format, logger: Logger.new($stdout))
+        @logger = logger
         @path = path
         @format = format
     end
@@ -34,7 +35,7 @@ class Downloader
             IO.copy_stream(download, filename)
         true
     rescue => e
-        puts "❌ Download failed for '#{track_object.title}': #{e.message}"
+        @logger.error "❌ Download failed for '#{track_object.title}': #{e.message}"
         false
     end
 end

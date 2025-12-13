@@ -1,6 +1,7 @@
 require 'httparty'
 require 'open-uri'
 require 'pry'
+require 'logger'
 
 require_relative 'deadlist/version'
 require_relative 'deadlist/cli'
@@ -9,7 +10,9 @@ require_relative 'deadlist/cli'
 class DeadList
     attr_reader :current_version
 
-    def initialize
+    def initialize(logger: Logger.new($stdout))
+        @logger = logger
+        @logger.level = Logger::INFO
         @current_version = VERSION
     end
 
@@ -18,7 +21,7 @@ class DeadList
     def run(argv = ARGV)
         # Start a new CLI session
         # In future this could be abstracted to pass the show link vs all args, so a 'session' is started per show.
-        session = CLI.new(@current_version, argv)
+        session = CLI.new(@current_version, argv, logger: @logger)
 
         # Scrape links and metadata for given show
         session.create_show
