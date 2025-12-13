@@ -31,6 +31,10 @@ class ArgumentParser
         puts "deadlist v#{version}"
         exit
       end
+
+      opts.on('-q', '--quiet', 'Run silently') do
+        params[:quiet] = true
+      end
     end
     
     parser.parse!(args)
