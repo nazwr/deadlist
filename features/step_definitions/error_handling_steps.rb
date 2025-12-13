@@ -88,6 +88,7 @@ end
 Given('an invalid archive.org URL {string}') do |url|
   @url = url
   @cli = CLI.allocate
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 When('the CLI extracts the show ID') do
@@ -105,6 +106,7 @@ end
 Given('a valid archive.org URL {string}') do |url|
   @url = url
   @cli = CLI.allocate
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 Then('it should return {string}') do |expected_id|
@@ -194,12 +196,10 @@ end
 
 When('create_show is called') do
   @output = StringIO.new
-  original_stdout = $stdout
-  $stdout = @output
+  @test_logger = create_test_logger(@output)
+  @cli.instance_variable_set(:@logger, @test_logger)
 
   @cli.create_show
-
-  $stdout = original_stdout
 end
 
 Then('it should catch the error and not crash') do
@@ -235,12 +235,10 @@ end
 
 When('download fails due to network error') do
   @output = StringIO.new
-  original_stdout = $stdout
-  $stdout = @output
+  @test_logger = create_test_logger(@output)
+  @cli.instance_variable_set(:@logger, @test_logger)
 
   @cli.download_show
-
-  $stdout = original_stdout
 end
 
 Then('display download failed message') do
@@ -253,20 +251,19 @@ end
 Given('a base path without write permissions') do
   @base_path = "/root/restricted"  # Typically no write access for regular users
   @cli = CLI.allocate
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
   @show = double('show', name: "Test Show")
 end
 
 When('directories are set up with permission error') do
   @output = StringIO.new
-  original_stdout = $stdout
-  $stdout = @output
+  @test_logger = create_test_logger(@output)
+  @cli.instance_variable_set(:@logger, @test_logger)
 
   # Mock FileUtils to simulate permission error
   allow(FileUtils).to receive(:mkdir_p).and_raise(Errno::EACCES.new("Permission denied"))
 
   @cli.send(:setup_directories, @show, @base_path)
-
-  $stdout = original_stdout
 end
 
 Then('it should catch the permission error') do

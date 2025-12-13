@@ -117,7 +117,9 @@ end
 
 # Error handling
 Given('a downloader with an invalid track URL') do
-  @downloader = Downloader.new("/tmp/test", "mp3")
+  @output = StringIO.new
+  @test_logger = create_test_logger(@output)
+  @downloader = Downloader.new("/tmp/test", "mp3", logger: @test_logger)
   @track = create_mock_track("1", "Test Track", "nonexistent.mp3")
   @base_url = "https://archive.org/download/invalid-show/"
 
@@ -136,16 +138,10 @@ Then('it should catch the error') do
 end
 
 Then('it should display an error message with track title') do
-  # Capture output
-  output = StringIO.new
-  original_stdout = $stdout
-  $stdout = output
-
   @downloader.get(@base_url, @track)
 
-  $stdout = original_stdout
-  output.rewind
-  captured_output = output.read
+  @output.rewind
+  captured_output = @output.read
 
   expect(captured_output).to match(/Download failed/)
   expect(captured_output).to match(/Test Track/)

@@ -25,6 +25,7 @@ end
 Given('a CLI instance with a show') do
   @show = create_mock_show
   @cli = CLI.allocate # Create instance without calling initialize
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 When('directories are set up') do
@@ -49,6 +50,7 @@ Given('a CLI instance with a show named {string}') do |show_name|
   @show = create_mock_show(show_name)
   @show_name = show_name
   @cli = CLI.allocate
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 Then('a subdirectory for the show should be created') do

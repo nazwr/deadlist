@@ -1,6 +1,9 @@
 # Coverage tracking must be started before any application code is loaded
 require 'simplecov'
 require 'simplecov-lcov'
+require 'rspec/expectations'
+require 'rspec/mocks'
+require 'logger'
 
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
@@ -19,11 +22,17 @@ SimpleCov.start do
   add_group 'Core', 'lib/deadlist.rb'
 end
 
-require 'rspec/expectations'
-require 'rspec/mocks'
-
 World(RSpec::Mocks::ExampleMethods)
 
 RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
 
 require_relative '../../lib/deadlist/version'
+
+# Helper to create a logger for testing that writes to a given IO
+def create_test_logger(io = $stdout)
+  logger = Logger.new(io)
+  logger.formatter = proc do |severity, datetime, progname, msg|
+    "#{msg}\n"
+  end
+  logger
+end
