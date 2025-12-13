@@ -13,6 +13,9 @@ class DeadList
     def initialize(logger: Logger.new($stdout))
         @logger = logger
         @logger.level = Logger::INFO
+        @logger.formatter = proc do |severity, datetime, progname, msg|
+          "#{msg}\n"
+        end
         @current_version = VERSION
     end
 

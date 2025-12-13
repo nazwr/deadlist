@@ -13,6 +13,9 @@ class CLI
         @args = {}
         @show = nil
         @logger = logger
+        @logger.formatter = proc do |severity, datetime, progname, msg|
+          "#{msg}\n"
+        end
 
         startup_text
         parse_arguments(args)
