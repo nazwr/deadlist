@@ -23,6 +23,7 @@ With Deadlist, you can download audio files in any of the formats available, reg
 | Help              | -h, --help      | Show help documentation                                    |
 | Version           | -v, --version   | Show version of DeadList                                   |
 | Quiet             | -q, --quiet     | Suppresses logger output for run                           |
+| Dry Run           | --dry-run       | Prevents files from being downloaded, prints track list    |
 
 
 ### Advanced Usage
