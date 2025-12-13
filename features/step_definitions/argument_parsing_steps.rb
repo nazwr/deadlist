@@ -80,7 +80,7 @@ end
 
 Then('it should exit with an error about missing required arguments') do
   expect(@exit_called).to be true
-  expect(@error_message).to match(/Missing required arguments/)
+  expect(@error_message).to match(/Arguments are required/)
 end
 
 # Case-insensitive format

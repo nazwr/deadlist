@@ -49,12 +49,20 @@ class ArgumentParser
   private
 
   def self.validate_required_params!(params, parser)
-    missing = []
-    missing << "--id" unless params[:id]
-    missing << "--format" unless params[:format]
+    has_id = params[:id]
+    has_format = params[:format]
     
-    unless missing.empty?
-      puts "Error: Missing required arguments: #{missing.join(', ')}"
+    # If one is provided, both must be provided
+    if !has_id && !has_format
+      puts "Error: Arguments are required for DeadList, try --help for more info"
+      puts parser
+      exit(1)
+    elsif has_id && !has_format
+      puts "Error: --format is required when --id is provided"
+      puts parser
+      exit(1)
+    elsif has_format && !has_id
+      puts "Error: --id is required when --format is provided"
       puts parser
       exit(1)
     end
