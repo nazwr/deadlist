@@ -34,7 +34,13 @@ class CLI
     # Validates format isn't for test, and passes directory + format arguments to the download method of a Show
     def download_show
         if @args[:format] == "test"
-          @logger.info "Test Download, skipping"   
+          @logger.info "Test Download, skipping"  
+        elsif @args[:dry_run]
+            @logger.info "🌵 Dry run - no tracks will be downloaded - track list:"
+            
+            @show.tracks.each do |track|
+                @logger.info "⚡️ #{track.pos} -- #{track.title}"
+            end
         else
             download_directory = setup_directories(@show, @args[:directory])
             @show.download_tracks(download_directory)

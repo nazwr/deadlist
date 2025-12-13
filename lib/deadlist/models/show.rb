@@ -54,7 +54,7 @@ class Show
         @tracks = set_tracks(show_data[:files])
         @url = "https://archive.org/metadata/#{show_data[:dir]}/"
 
-        @logger.info "🌹💀 Downloading #{name}"
+        @logger.info "🌹💀 Show #{name} found!"
     end
     
     # Converts track lists to Track objects

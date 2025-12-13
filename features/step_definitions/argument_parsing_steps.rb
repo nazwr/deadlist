@@ -183,7 +183,7 @@ Then('it should display the track list') do
   output_text = @output.read
 
   # Should show dry-run header with track count
-  expect(output_text).to match(/Dry Run:.*will be downloaded with 3 tracks/)
+  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
 
   # Should list each track
   expect(output_text).to match(/New Minglewood Blues/)
@@ -196,7 +196,7 @@ And('no files should be downloaded') do
   output_text = @output.read
 
   # Verify dry-run message appears (proving we're in dry-run mode)
-  expect(output_text).to match(/Dry Run:/)
+  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
 
   # Verify actual download messages DON'T appear
   expect(output_text).not_to match(/⬇️ Downloading/)
