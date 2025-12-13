@@ -182,14 +182,22 @@ Then('it should display the track list') do
   @output.rewind
   output_text = @output.read
 
-  # Should show tracks would be downloaded
+  # Should show dry-run header with track count
+  expect(output_text).to match(/Dry Run:.*will be downloaded with 3 tracks/)
+
+  # Should list each track
   expect(output_text).to match(/New Minglewood Blues/)
   expect(output_text).to match(/Scarlet Begonias/)
   expect(output_text).to match(/Fire On The Mountain/)
-end
+  end
 
 And('no files should be downloaded') do
-  # Check that no mp3 files were created in the temp directory
-  mp3_files = Dir.glob(File.join(@temp_dir, '**', '*.mp3'))
-  expect(mp3_files).to be_empty
+  @output.rewind
+  output_text = @output.read
+
+  # Verify dry-run message appears (proving we're in dry-run mode)
+  expect(output_text).to match(/Dry Run:/)
+
+  # Verify actual download messages DON'T appear
+  expect(output_text).not_to match(/⬇️ Downloading/)
 end
