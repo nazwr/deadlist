@@ -19,29 +19,45 @@ class DeadList
       @current_version = VERSION
     end
 
-    # Argument abstraction should probably happen at this level!
-
     def run(argv = ARGV)
+      # Parse arguments to get show IDs and options
+      parsed_args = ArgumentParser.parse(argv, @current_version)
+      show_ids = parsed_args[:ids]
+
       # Check for --quiet flag and adjust logger level
-      if argv.include?('--quiet') || argv.include?('-q')
+      if parsed_args[:quiet]
           @logger.level = Logger::ERROR
       end
-      
-      # Start a new CLI session
-      # In future this could be abstracted to pass the show link vs all args, so a 'session' is started per show.
-      session = CLI.new(@current_version, argv, logger: @logger)
 
-      # Scrape links and metadata for given show
-      session.create_show
+      # Process each show
+      show_ids.each_with_index do |show_id, index|
+        @logger.info "📻 Processing show #{index + 1}/#{show_ids.count}: #{show_id}"
 
-      # In future, consider starting multiple downloaders for a list of shows
-      # show_list = session.args[:shows]
-      # show_list.each do |show|
-      #   session.download_show(show)
-      # end
+        # Build arguments for this specific show
+        show_argv = ['--id', show_id, '--format', parsed_args[:format]]
+        show_argv += ['--directory', parsed_args[:directory]] if parsed_args[:directory]
+        show_argv += ['--quiet'] if parsed_args[:quiet]
+        show_argv += ['--dry-run'] if parsed_args[:dry_run]
 
-      # Create folder with show date and begin track downloads if format matches
-      session.download_show
+        # Create CLI session for this show
+        session = CLI.new(@current_version, show_argv, logger: @logger)
+
+        # Scrape links and metadata for given show
+        session.create_show
+
+        # Check if show has tracks in requested format
+        if session.show && session.show.tracks.empty?
+          @logger.error "❌ #{show_id} not available in #{parsed_args[:format]} format"
+          if session.show.available_formats && !session.show.available_formats.empty?
+            @logger.error "   Available formats: #{session.show.available_formats.join(', ')}"
+          end
+          @logger.error "   Skipping..."
+          next  # Skip to next show
+        end
+
+        # Create folder and begin track downloads
+        session.download_show
+      end
     end
 end
 

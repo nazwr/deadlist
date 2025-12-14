@@ -8,6 +8,8 @@ require 'optparse'
 
 # The CLI is the 'session' created by the main class, managing arguments passed in and housing methods for scraping and downloading shows.
 class CLI
+    attr_reader :args, :show
+
     def initialize(version, args, logger: Logger.new($stdout))
         @version = version
         @args = {}
@@ -23,7 +25,8 @@ class CLI
 
     # Creates new show object with link given populated with metadata and track details
     def create_show
-        extracted_id = extract_show_id(@args[:id])
+        show_id = @args[:ids].first
+        extracted_id = extract_show_id(show_id)
         @show = Show.new(extracted_id, @args[:format], logger: @logger)
 
         @logger.info "💿 #{@show.name} - #{@show.tracks.length} tracks found!"
@@ -31,15 +34,12 @@ class CLI
         @logger.error "❌ Scraping failed: #{e.message}"
     end
 
-    # Validates format isn't for test, and passes directory + format arguments to the download method of a Show
+    # Downloads show tracks or displays dry-run preview
     def download_show
-        if @args[:format] == "test"
-          @logger.info "Test Download, skipping"  
-        elsif @args[:dry_run]
-            @logger.info "🌵 Dry run - no tracks will be downloaded - track list:"
-            
+        if @args[:dry_run]
+            @logger.info "🔍 Dry Run: #{@show.name} will be downloaded with #{@show.tracks.count} tracks"
             @show.tracks.each do |track|
-                @logger.info "⚡️ #{track.pos} -- #{track.title}"
+                @logger.info "  #{track.pos} - #{track.title}"
             end
         else
             download_directory = setup_directories(@show, @args[:directory])
