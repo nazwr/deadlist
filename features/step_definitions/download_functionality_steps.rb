@@ -38,10 +38,21 @@ Given('a track with position {string}, title {string}, and filename {string}') d
 end
 
 When('the file is downloaded') do
-  # We're testing the filename construction, not actual download
-  # The filename is constructed in the get method
-  @expected_filename = "#{@path}/#{@track.pos} -- #{@track.title}.#{@format}"
-end
+  # Extract disc number from filename (e.g., "d1" from "gd76-09-25d1t01.mp3")
+  disc_match = @track.filename.match(/(?<!g)d(\d+)/)
+
+  if disc_match
+    # Multi-disc: use disc-track format (1-01, 2-01, etc.)
+    disc_num = disc_match[1]
+    padded_track = @track.pos.rjust(2, '0')
+    sanitized_title = @track.title.gsub('/', '-')
+    @expected_filename = "#{@path}/#{disc_num}-#{padded_track} -- #{sanitized_title}.#{@format}"
+  else
+    # Single disc: use regular format
+    sanitized_title = @track.title.gsub('/', '-')
+    @expected_filename = "#{@path}/#{@track.pos} -- #{sanitized_title}.#{@format}"
+  end
+  end
 
 Then('the file should be saved as {string}') do |expected_name|
   full_expected_path = "#{@path}/#{expected_name}"
@@ -106,7 +117,9 @@ end
 
 # Error handling
 Given('a downloader with an invalid track URL') do
-  @downloader = Downloader.new("/tmp/test", "mp3")
+  @output = StringIO.new
+  @test_logger = create_test_logger(@output)
+  @downloader = Downloader.new("/tmp/test", "mp3", logger: @test_logger)
   @track = create_mock_track("1", "Test Track", "nonexistent.mp3")
   @base_url = "https://archive.org/download/invalid-show/"
 
@@ -125,16 +138,10 @@ Then('it should catch the error') do
 end
 
 Then('it should display an error message with track title') do
-  # Capture output
-  output = StringIO.new
-  original_stdout = $stdout
-  $stdout = output
-
   @downloader.get(@base_url, @track)
 
-  $stdout = original_stdout
-  output.rewind
-  captured_output = output.read
+  @output.rewind
+  captured_output = @output.read
 
   expect(captured_output).to match(/Download failed/)
   expect(captured_output).to match(/Test Track/)

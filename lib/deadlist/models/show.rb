@@ -4,7 +4,8 @@ class Show
 
     attr_reader :name, :venue, :date, :location, :duration, :transferred_by, :tracks, :available_formats
 
-    def initialize(show_id, format)
+    def initialize(show_id, format, logger: Logger.new($stdout))
+        @logger = logger
         @show_id = show_id
         @format = format
         @name = nil
@@ -21,16 +22,21 @@ class Show
 
     # Initializes a Downloader and passes track details
     def download_tracks(path)
-        dl = Downloader.new(path, @format)
+        dl = Downloader.new(path, @format, logger: @logger)
         download_url = dl.download_url_for_show(@show_id)
+        succesful_downloads = 0
 
         @tracks.each do |track|
-            puts "⬇️ Downloading #{track.pos} - #{track.title}..."
+            @logger.info "⬇️ Downloading #{track.pos} - #{track.title}..."
 
-            dl.get(download_url, track)
+            if dl.get(download_url, track)
+                succesful_downloads += 1
+            end
 
-            puts "⚡️ #{track.pos} - #{track.title} downloaded successfully"
+            @logger.info "⚡️ #{track.pos} - #{track.title} downloaded successfully"
         end
+
+        @logger.info "✅ Downloaded #{succesful_downloads}/#{@tracks.length} tracks successfully!"
     end
 
     private
@@ -48,7 +54,7 @@ class Show
         @tracks = set_tracks(show_data[:files])
         @url = "https://archive.org/metadata/#{show_data[:dir]}/"
 
-        puts "🌹💀 Downloading #{name}"
+        @logger.info "🌹💀 Show #{name} found!"
     end
     
     # Converts track lists to Track objects
@@ -57,7 +63,7 @@ class Show
                             .select { |file| matches_format?(file, @format) }
                             
         if audio_files.empty?
-            puts "❌ No #{@format} files found"
+            @logger.error "❌ No #{@format} files found"
             return []
         end
   
