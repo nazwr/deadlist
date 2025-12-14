@@ -15,7 +15,7 @@ Scenario: Download multiple shows successfully
 
 Scenario: Handle format mismatch gracefully
     Given valid arguments with ids "show-with-mp3,show-without-mp3" and format "mp3"
-    When the shows are downloaded
+    When the shows are downloaded with format mismatch
     Then the first show should download successfully
     And the second show should display format error with available formats
     And the second show should be skipped

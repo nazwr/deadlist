@@ -83,8 +83,8 @@ Then('it should set up the directory structure') do
 end
 
 Then('it should initiate the download process') do
-  # If format is not "test", download_show is called
-  expect(@output).not_to include("Test Download, skipping")
+  # download_show is called (unless dry-run or format mismatch)
+  expect(@output).not_to include("Dry Run:")
 end
 
 Then('the process should complete without errors') do
@@ -152,9 +152,13 @@ Given('a DeadList instance') do
 end
 
 Given('I mock the CLI flow') do
+  # Mock show with tracks (format matches)
+  mock_show = double('show', tracks: [double('track')], available_formats: ['mp3'])
+
   @cli_double = double('cli')
   allow(@cli_double).to receive(:create_show)
   allow(@cli_double).to receive(:download_show)
+  allow(@cli_double).to receive(:show).and_return(mock_show)
 
   # Mock CLI.new to return our double
   allow(CLI).to receive(:new).and_return(@cli_double)
