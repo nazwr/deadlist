@@ -13,28 +13,41 @@ With Deadlist, you can download audio files in any of the formats available, reg
 ### Download a show in mp3
 `deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16`
 
+### Download multiple shows at once
+`deadlist -f mp3 -i gd1977-05-08,gd1977-05-09,gd1978-05-05`
+
 ### Full list of arguments
 
 | Name              | Arguments       | Usage                                                      |
 | ----------------- | --------------- | ---------------------------------------------------------- |
 | Format (required) | -f, --format    | Format for track downloads, typically .mp3, .ogg or .flac  |
-| ID (required)     | -i, --id        | Identifier of show to be downloaded                        |
+| ID (required)     | -i, --id        | Show identifier(s) - single or comma-separated for multiple shows |
 | Directory         | -d, --directory | Custom download location. Defaults to ./shows              |
 | Help              | -h, --help      | Show help documentation                                    |
 | Version           | -v, --version   | Show version of DeadList                                   |
 | Quiet             | -q, --quiet     | Suppresses logger output for run                           |
-| Dry Run           | --dry-run       | Prevents files from being downloaded, prints track list    |
+| Dry Run           | --dry-run       | Preview mode - shows what would be downloaded without downloading |
 
 
 ### Advanced Usage
 #### Custom download location
 `deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16 -d /path/to/downloads`
 
+#### Preview before downloading
+`deadlist -f mp3 -i gd1977-05-08 --dry-run`
+
+#### Download multiple shows quietly
+`deadlist -f mp3 -i gd1977-05-08,gd1978-05-05,gd1979-05-05 --quiet`
+
 ## Features
+- **Batch downloads**: Download multiple shows at once with comma-separated IDs
 - **Stream-only bypass**: Download files marked as "Stream Only" on archive.org
 - **Multi-disc support**: Automatically handles shows split into multiple discs/sets with proper track numbering (e.g., `1-01`, `2-01`)
 - **Smart file naming**: Sanitizes problematic characters (like slashes) in song titles
-- **Download tracking**: Shows progress with "Downloaded X/Y tracks successfully!" summary
+- **Download tracking**: Shows progress with "Downloaded X/Y tracks successfully!" summary and "Processing show 1/3" for batches
+- **Graceful error handling**: If a show isn't available in the requested format, it's skipped and others continue
+- **Preview mode**: Use `--dry-run` to see what would be downloaded without actually downloading
+- **Quiet mode**: Use `--quiet` to suppress informational output, showing only errors
 - **Customizable output**: Specify download location or use default `./shows/` directory
 
 ## How do I find the identifier of the show I want to download?
