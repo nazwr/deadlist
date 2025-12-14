@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/nazwr/deadlist/badge.svg?branch=main)](https://coveralls.io/github/nazwr/deadlist?branch=main)
 
-A client for downloading Grateful Dead recordings hosted by archive.org.
+A Ruby client for downloading Grateful Dead recordings hosted by archive.org.
 
 With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the current directory by default, or to a custom location using the `--directory` flag.
 
