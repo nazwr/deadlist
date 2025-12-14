@@ -12,8 +12,9 @@ When('the arguments are parsed') do
 end
 
 Then('the parsed parameters should include the id') do
-  expect(@parsed_params[:id]).not_to be_nil
-  expect(@parsed_params[:id]).to be_a(String)
+  expect(@parsed_params[:ids]).not_to be_nil
+  expect(@parsed_params[:ids]).to be_an(Array)
+  expect(@parsed_params[:ids].first).to be_a(String)
 end
 
 Then('the parsed parameters should include the format') do
@@ -183,7 +184,7 @@ Then('it should display the track list') do
   output_text = @output.read
 
   # Should show dry-run header with track count
-  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
+  expect(output_text).to match(/🔍 Dry Run:.*will be downloaded with \d+ tracks/)
 
   # Should list each track
   expect(output_text).to match(/New Minglewood Blues/)
@@ -196,7 +197,7 @@ And('no files should be downloaded') do
   output_text = @output.read
 
   # Verify dry-run message appears (proving we're in dry-run mode)
-  expect(output_text).to match(/🌵 Dry run - no tracks will be downloaded - track list:/)
+  expect(output_text).to match(/🔍 Dry Run:/)
 
   # Verify actual download messages DON'T appear
   expect(output_text).not_to match(/⬇️ Downloading/)

@@ -54,7 +54,7 @@ Feature: End-to-end CLI integration
     And the process should not crash
 
   Scenario: Full flow creates proper directory structure
-    Given I have valid arguments "--id gd1977-05-08 --format flac"
+    Given I have valid arguments "--id gd1977-05-08 --format mp3"
     When I run the DeadList CLI with directory tracking
     Then it should create the shows directory
     And it should create a show-specific subdirectory
@@ -67,14 +67,6 @@ Feature: End-to-end CLI integration
     Then it should display the startup banner
     And it should create the show successfully
     And it should display "No ogg files found" message
-    And the process should complete without downloads
-
-  Scenario: Test format skips download
-    Given I have valid arguments "--id gd1977-05-08 --format test"
-    When I run the DeadList CLI
-    Then it should display the startup banner
-    And it should create the show successfully
-    And it should display "Test Download, skipping" message
     And the process should complete without downloads
 
   Scenario: Run with --quiet flag suppresses info messages
