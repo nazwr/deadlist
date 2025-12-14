@@ -25,11 +25,13 @@ end
 Given('a CLI instance with a show') do
   @show = create_mock_show
   @cli = CLI.allocate # Create instance without calling initialize
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 When('directories are set up') do
   @temp_dir = Dir.mktmpdir
-  @result_path = @cli.send(:setup_directories, @show, @temp_dir)
+  Dir.chdir(@temp_dir)  # Work from temp directory
+  @result_path = @cli.send(:setup_directories, @show)  # Use default behavior
 end
 
 Then('a {string} directory should be created') do |dir_name|
@@ -48,6 +50,7 @@ Given('a CLI instance with a show named {string}') do |show_name|
   @show = create_mock_show(show_name)
   @show_name = show_name
   @cli = CLI.allocate
+  @cli.instance_variable_set(:@logger, Logger.new($stdout))
 end
 
 Then('a subdirectory for the show should be created') do
@@ -60,10 +63,9 @@ Then('the subdirectory should be named {string}') do |expected_name|
   expect(File.exist?(expected_path)).to be true
 end
 
-# Return path validation
 Then('the returned path should point to the show directory') do
   expected_path = File.join(@temp_dir, "shows", @show.name)
-  expect(@result_path).to eq(expected_path)
+  expect(File.realpath(@result_path)).to eq(File.realpath(expected_path))  # ✅ Normalizes paths
 end
 
 Then('the path should be absolute') do

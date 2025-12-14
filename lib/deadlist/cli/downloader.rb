@@ -3,7 +3,8 @@
 class Downloader
     BASE_API_URL = 'https://archive.org'
 
-    def initialize(path, format)
+    def initialize(path, format, logger: Logger.new($stdout))
+        @logger = logger
         @path = path
         @format = format
     end
@@ -16,10 +17,25 @@ class Downloader
     def get(root_url, track_object)
         uri = URI.parse(root_url + track_object.filename); raise ArgumentError, "Only HTTP(S) URLs allowed" unless uri.is_a?(URI::HTTP)
         download = uri.open
-        filename = "#{@path}/#{track_object.pos} -- #{track_object.title}.#{@format}"
 
-        IO.copy_stream(download, filename)
+        # Extract disc number from filename
+        disc_match = track_object.filename.match(/(?<!g)d(\d+)/)
+        sanitized_title = track_object.title.gsub('/', '-')
+
+        if disc_match
+            # Multi-disc: use disc-track format (1-01, 2-01, etc.)
+            disc_num = disc_match[1]
+            padded_track = track_object.pos.rjust(2, '0')
+            filename = "#{@path}/#{disc_num}-#{padded_track} -- #{sanitized_title}.#{@format}"
+        else
+            # Single disc: regular format
+            filename = "#{@path}/#{track_object.pos} -- #{sanitized_title}.#{@format}"
+        end
+
+            IO.copy_stream(download, filename)
+        true
     rescue => e
-        puts "❌ Download failed for '#{track_object.title}': #{e.message}"
+        @logger.error "❌ Download failed for '#{track_object.title}': #{e.message}"
+        false
     end
 end

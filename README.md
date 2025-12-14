@@ -2,9 +2,9 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/nazwr/deadlist/badge.svg?branch=main)](https://coveralls.io/github/nazwr/deadlist?branch=main)
 
-A client for downloading Grateful Dead recordings hosted by archive.org.
+A Ruby client for downloading Grateful Dead recordings hosted by archive.org.
 
-With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the location deadlist was executed from.
+With Deadlist, you can download audio files in any of the formats available, regardless of if they have been marked as "Stream Only". Files will download into a 'shows' folder in the current directory by default, or to a custom location using the `--directory` flag.
 
 ## Install
 `gem install deadlist`
@@ -13,15 +13,42 @@ With Deadlist, you can download audio files in any of the formats available, reg
 ### Download a show in mp3
 `deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16`
 
+### Download multiple shows at once
+`deadlist -f mp3 -i gd1977-05-08,gd1977-05-09,gd1978-05-05`
+
 ### Full list of arguments
 
-| Name              | Arguments     | Usage                                                      |
-| ----------------- | ------------- | ---------------------------------------------------------- |
-| Format (required) | -f, --format  | Format for track downloads, typically .mp3, .ogg or .flac  |
-| ID (required)     | -i, --id      | Identifier of show to be downloaded.                       |
-| Help              | -h, --help    | Show help documentation                                    |
-| Version           | -v, --version | Prints version of DeadList being run                       |
+| Name              | Arguments       | Usage                                                      |
+| ----------------- | --------------- | ---------------------------------------------------------- |
+| Format (required) | -f, --format    | Format for track downloads, typically .mp3, .ogg or .flac  |
+| ID (required)     | -i, --id        | Show identifier(s) - single or comma-separated for multiple shows |
+| Directory         | -d, --directory | Custom download location. Defaults to ./shows              |
+| Help              | -h, --help      | Show help documentation                                    |
+| Version           | -v, --version   | Show version of DeadList                                   |
+| Quiet             | -q, --quiet     | Suppresses logger output for run                           |
+| Dry Run           | --dry-run       | Preview mode - shows what would be downloaded without downloading |
 
+
+### Advanced Usage
+#### Custom download location
+`deadlist -f mp3 -i gd1977-05-09.123480.sbd.miller.flac16 -d /path/to/downloads`
+
+#### Preview before downloading
+`deadlist -f mp3 -i gd1977-05-08 --dry-run`
+
+#### Download multiple shows quietly
+`deadlist -f mp3 -i gd1977-05-08,gd1978-05-05,gd1979-05-05 --quiet`
+
+## Features
+- **Batch downloads**: Download multiple shows at once with comma-separated IDs
+- **Stream-only bypass**: Download files marked as "Stream Only" on archive.org
+- **Multi-disc support**: Automatically handles shows split into multiple discs/sets with proper track numbering (e.g., `1-01`, `2-01`)
+- **Smart file naming**: Sanitizes problematic characters (like slashes) in song titles
+- **Download tracking**: Shows progress with "Downloaded X/Y tracks successfully!" summary and "Processing show 1/3" for batches
+- **Graceful error handling**: If a show isn't available in the requested format, it's skipped and others continue
+- **Preview mode**: Use `--dry-run` to see what would be downloaded without actually downloading
+- **Quiet mode**: Use `--quiet` to suppress informational output, showing only errors
+- **Customizable output**: Specify download location or use default `./shows/` directory
 
 ## How do I find the identifier of the show I want to download?
 * IDs can be found in the details section at the bottom of the page (just above reviews), alongside 'Lineage' and 'Transferred by' etc.
@@ -58,16 +85,7 @@ bundle exec cucumber features/argument_parsing.feature
 ```
 
 ### Test Coverage
-Current test coverage includes:
-- Argument parsing and validation
-- Show metadata extraction from archive.org API
-- Track filtering by audio format
-- Directory creation and organization
-- Download functionality
-- Error handling for invalid inputs and API failures
-- Version output
-
-**49 scenarios, 192 steps, 89%+ code coverage**
+Current test coverage includes core functionality of DeadList and should be run when updating or adding new features.
 
 ### Viewing Coverage Reports
 After running tests, view the coverage report locally:
@@ -80,6 +98,9 @@ xdg-open coverage/index.html  # Linux
 Coverage is also automatically tracked on [Coveralls](https://coveralls.io/github/nazwr/deadlist) for all pull requests and main branch pushes.
 
 ## Releasing
+
+### Working on a New Release
+When working on a new release, its best to have a release/x.x.x branch to work from as releases should build from main. Feature branches should be worked on under the release branch until they are ready to be released through the process described below.
 
 ### Creating a New Release
 

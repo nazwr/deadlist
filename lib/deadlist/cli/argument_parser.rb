@@ -7,8 +7,8 @@ class ArgumentParser
       opts.separator ""
       opts.separator "Required options:"
       
-      opts.on("-i", "--id ID", "ID of show to download") do |id|
-        params[:id] = id
+      opts.on("-i", "--id ID", "ID of show(s) to download (comma-separated for multiple)") do |id|
+        params[:ids] = id.split(',').map(&:strip)
       end
       
       opts.on("-f", "--format FORMAT", "Format to download (mp3, flac, ogg)") do |format|
@@ -18,6 +18,10 @@ class ArgumentParser
       opts.separator ""
       opts.separator "Other options:"
       
+      opts.on("-d", "--directory PATH", "Directory to save show(s) to. Will default to /shows/ in the execution directory") do |dir|
+        params[:directory] = dir
+      end
+
       opts.on("-h", "--help", "Show this help") do
         puts opts
         exit
@@ -26,6 +30,14 @@ class ArgumentParser
       opts.on("-v", "--version", "Show version") do
         puts "deadlist v#{version}"
         exit
+      end
+
+      opts.on('-q', '--quiet', 'Run silently') do
+        params[:quiet] = true
+      end
+
+      opts.on('--dry-run', 'List tracks to be downloaded') do
+        params[:dry_run] = true
       end
     end
     
@@ -41,12 +53,20 @@ class ArgumentParser
   private
 
   def self.validate_required_params!(params, parser)
-    missing = []
-    missing << "--id" unless params[:id]
-    missing << "--format" unless params[:format]
-    
-    unless missing.empty?
-      puts "Error: Missing required arguments: #{missing.join(', ')}"
+    has_ids = params[:ids]&.any?
+    has_format = params[:format]
+
+    # If one is provided, both must be provided
+    if !has_ids && !has_format
+      puts "Error: Arguments are required for DeadList, try --help for more info"
+      puts parser
+      exit(1)
+    elsif has_ids && !has_format
+      puts "Error: --format is required when --id is provided"
+      puts parser
+      exit(1)
+    elsif has_format && !has_ids
+      puts "Error: --id is required when --format is provided"
       puts parser
       exit(1)
     end

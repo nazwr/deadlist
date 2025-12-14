@@ -83,8 +83,8 @@ Then('it should set up the directory structure') do
 end
 
 Then('it should initiate the download process') do
-  # If format is not "test", download_show is called
-  expect(@output).not_to include("Test Download, skipping")
+  # download_show is called (unless dry-run or format mismatch)
+  expect(@output).not_to include("Dry Run:")
 end
 
 Then('the process should complete without errors') do
@@ -152,9 +152,13 @@ Given('a DeadList instance') do
 end
 
 Given('I mock the CLI flow') do
+  # Mock show with tracks (format matches)
+  mock_show = double('show', tracks: [double('track')], available_formats: ['mp3'])
+
   @cli_double = double('cli')
   allow(@cli_double).to receive(:create_show)
   allow(@cli_double).to receive(:download_show)
+  allow(@cli_double).to receive(:show).and_return(mock_show)
 
   # Mock CLI.new to return our double
   allow(CLI).to receive(:new).and_return(@cli_double)
@@ -167,7 +171,7 @@ When('I call the run method') do
 end
 
 Then('it should create a CLI session') do
-  expect(CLI).to have_received(:new).with('1.1.0', ['--id', 'test', '--format', 'mp3'])
+  expect(CLI).to have_received(:new).with(DeadList::VERSION, ['--id', 'test', '--format', 'mp3'], anything())
 end
 
 Then('it should call create_show on the session') do
@@ -186,7 +190,7 @@ end
 # Startup banner
 Given('I initialize a CLI with valid arguments') do
   @output = capture_output do
-    @cli = CLI.new('1.1.0', ['--id', 'test', '--format', 'mp3'])
+    @cli = CLI.new(DeadList::VERSION, ['--id', 'test', '--format', 'mp3'])
   end
 end
 
@@ -292,4 +296,14 @@ end
 Then('the process should complete without downloads') do
   # No download errors, but also no actual downloads
   expect(@output).not_to include("Download failed")
+end
+
+Then('it should not display the startup banner') do
+  expect(@output).not_to include("One man gathers what another man spills")
+  expect(@output).not_to include("=" * 52)
+end
+
+Then('it should not display info messages') do
+  expect(@output).not_to include("tracks found")
+  expect(@output).not_to include("💿")
 end

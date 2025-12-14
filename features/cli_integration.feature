@@ -10,6 +10,7 @@ Feature: End-to-end CLI integration
     And it should create a show with metadata
     And it should set up the directory structure
     And it should initiate the download process
+    And it should display "Downloaded 2/2 tracks successfully!" message
     And the process should complete without errors
 
   Scenario: Full flow with invalid show ID
@@ -53,7 +54,7 @@ Feature: End-to-end CLI integration
     And the process should not crash
 
   Scenario: Full flow creates proper directory structure
-    Given I have valid arguments "--id gd1977-05-08 --format flac"
+    Given I have valid arguments "--id gd1977-05-08 --format mp3"
     When I run the DeadList CLI with directory tracking
     Then it should create the shows directory
     And it should create a show-specific subdirectory
@@ -68,10 +69,14 @@ Feature: End-to-end CLI integration
     And it should display "No ogg files found" message
     And the process should complete without downloads
 
-  Scenario: Test format skips download
-    Given I have valid arguments "--id gd1977-05-08 --format test"
+  Scenario: Run with --quiet flag suppresses info messages
+    Given I have valid arguments "--id gd1977-05-08 --format mp3 --quiet"
     When I run the DeadList CLI
-    Then it should display the startup banner
-    And it should create the show successfully
-    And it should display "Test Download, skipping" message
-    And the process should complete without downloads
+    Then it should not display the startup banner
+    And it should not display info messages
+
+  Scenario: Quiet mode still shows errors
+    Given I have arguments with invalid show ID "--id invalid-show --format mp3 --quiet"
+    When I run the DeadList CLI with error handling
+    Then it should display a scraping error message
+    And it should not display the startup banner

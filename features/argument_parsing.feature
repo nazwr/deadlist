@@ -42,3 +42,19 @@ Feature: Argument parsing
     Given arguments with invalid option "--invalid-flag"
     When the arguments are parsed with error handling
     Then it should exit with an error about invalid option
+  
+  Scenario: Output directory is optional
+    Given valid arguments with id "gd1977-05-08" and format "mp3" and directory "/custom/path"
+    When the arguments are parsed
+    Then the parsed parameters should include the output directory
+
+  Scenario: --dry-run flag is parsed
+    Given valid arguments with id "gd1977-05-08" and format "mp3" and --dry-run flag
+    When the arguments are parsed
+    Then the parsed parameters should include dry_run as true
+
+  Scenario: Dry-run shows preview without downloading
+    Given a CLI instance with --dry-run flag
+    When the show is created and downloaded with dry-run
+    Then it should display the track list
+    And no files should be downloaded
